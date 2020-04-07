@@ -21,7 +21,7 @@
 title: Ginger engineering blog
 email: engineering-blog@ginger.io
 description: >- # this means to ignore newlines until "baseurl:"
-  This is Ginger's engineering blob
+  This is Ginger's engineering blog
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://ginger-io.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: ginger_io
