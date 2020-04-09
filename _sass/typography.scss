@@ -1,0 +1,60 @@
+/** Styles and fonts copied from https://www.ginger.io/brand */
+
+@font-face {
+  font-family: "Heldane Display";
+  src: url(/fonts/Heldane_Display_Regular.otf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Heldane Display";
+  src: url(/fonts/Heldane_Display_Bold.otf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Untitled Sans";
+  src: url(/fonts/Untitled_Sans_Regular.ttf);
+  font-weight: bold;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Heldane display", sans-serif;
+}
+
+h1 {
+  margin: 0.67em 0;
+  margin-top: 0px;
+  margin-bottom: 25px;
+  font-size: 96px;
+  line-height: 1.1em;
+  font-weight: 700;
+  text-transform: none;
+  color: #000;
+}
+
+h2 {
+  line-height: 36px;
+  margin-bottom: 24px;
+  margin-top: 200px;
+  color: #000;
+  font-size: 96px;
+  font-weight: 700;
+}
+
+p {
+  font-family: "Untitled sans", sans-serif;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #000;
+  font-size: 18px;
+  line-height: 30px;
+  font-weight: 300;
+  text-align: left;
+  letter-spacing: 0px;
+}
