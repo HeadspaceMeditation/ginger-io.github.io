@@ -3,6 +3,7 @@ layout: post
 title: "Introducing Jay-Z"
 date: 2020-04-09
 categories: [security, aws]
+author: Josh Carver
 ---
 
 ## Ginger’s TypeScript library for application-layer encryption
@@ -62,12 +63,12 @@ Now that we’ve covered how Jay-Z works, let's take a look at how to use it. Fo
 The first thing you need to do is get a JayZ object:
 
 ```typescript
-import { KMS } from "aws-sdk";
-import { KMSDataKeyProvider, JayZ } from "@ginger.io/jay-z";
+import { KMS } from "aws-sdk"
+import { KMSDataKeyProvider, JayZ } from "@ginger.io/jay-z"
 
-const kmsKeyId = "..."; // the KMS key id or arn you want to use
-const keyProvider = new KMSDataKeyProvider(kmsKeyId, new KMS());
-const jayZ = new JayZ({ keyProvider });
+const kmsKeyId = "..." // the KMS key id or arn you want to use
+const keyProvider = new KMSDataKeyProvider(kmsKeyId, new KMS())
+const jayZ = new JayZ({ keyProvider })
 ```
 
 ### 2. Encrypt a bank account
@@ -79,12 +80,12 @@ const bankAccount: BankAccount = {
   id: "1",
   accountNumber: "an-123",
   routingNumber: "rn-123",
-};
+}
 
 const encryptedItem = await jayZ.encryptItem(
   bankAccount,
   ["accountNumber", "routingNumber"] // fields to encrypt
-);
+)
 ```
 
 #### Note
@@ -100,7 +101,7 @@ So when you serialize your data to your data store, you can rest assured that yo
 Finally, decryption with Jay-Z is easy, just 1 line:
 
 ```typescript
-const decryptedItem = await jayZ.decryptItem(encrypted);
+const decryptedItem = await jayZ.decryptItem(encrypted)
 ```
 
 ## Providing your own DataKeyProvider
@@ -109,14 +110,14 @@ If you don’t want to use KMS (or can’t because you’re not on AWS), you can
 
 ```typescript
 export interface DataKeyProvider {
-  generateDataKey(): Promise<DataKey>;
-  decryptDataKey(encryptedDataKey: Uint8Array): Promise<Uint8Array>;
+  generateDataKey(): Promise<DataKey>
+  decryptDataKey(encryptedDataKey: Uint8Array): Promise<Uint8Array>
 }
 
 export type DataKey = {
-  dataKey: Uint8Array;
-  encryptedDataKey: Uint8Array;
-};
+  dataKey: Uint8Array
+  encryptedDataKey: Uint8Array
+}
 ```
 
 Once you have your CustomKeyProvider, you can plug it into Jay-Z like so:
@@ -134,38 +135,38 @@ But if for some reason you need to use a different encryption or decryption stra
 
 ```typescript
 export interface Encryptor {
-  readonly scheme: EncryptionScheme;
+  readonly scheme: EncryptionScheme
 
   encrypt<T, K extends keyof T>(
     params: EncryptParams<T, K>
-  ): Promise<EncryptResult<T, K>>;
+  ): Promise<EncryptResult<T, K>>
 
   decrypt<T, K extends keyof T>(
     params: DecryptParams<T, K>
-  ): Promise<DecryptResult<T>>;
+  ): Promise<DecryptResult<T>>
 }
 
 export type EncryptParams<T, K extends keyof T> = {
-  item: T;
-  fieldsToEncrypt: K[];
-  dataKey: Uint8Array;
-};
+  item: T
+  fieldsToEncrypt: K[]
+  dataKey: Uint8Array
+}
 
 export type EncryptResult<T, K extends keyof T> = {
-  encryptedItem: ItemWithEncryptedFields<T, K>;
-  nonce: Uint8Array;
-};
+  encryptedItem: ItemWithEncryptedFields<T, K>
+  nonce: Uint8Array
+}
 
 export type DecryptParams<T, K extends keyof T> = {
-  encryptedItem: ItemWithEncryptedFields<T, K>;
-  fieldsToDecrypt: K[];
-  dataKey: Uint8Array;
-  nonce: Uint8Array;
-};
+  encryptedItem: ItemWithEncryptedFields<T, K>
+  fieldsToDecrypt: K[]
+  dataKey: Uint8Array
+  nonce: Uint8Array
+}
 
 export type DecryptResult<T> = {
-  decryptedItem: T;
-};
+  decryptedItem: T
+}
 ```
 
 And once we have our CustomEncryptor, we can plug it in like so:
@@ -187,8 +188,8 @@ So Jay-Z allows you to amortize these costs by reusing data keys across encrypti
 Setting this to a value of N means that Jay-Z will reuse a particular data key a maximum of N times before requesting a new one. For example we could set this to 100:
 
 ```typescript
-const keyProvider = new KMSDataKeyProvider(kmsKeyId, new KMS());
-const jayZ = new JayZ({ keyProvider, maxUsesPerDataKey: 100 });
+const keyProvider = new KMSDataKeyProvider(kmsKeyId, new KMS())
+const jayZ = new JayZ({ keyProvider, maxUsesPerDataKey: 100 })
 ```
 
 If you choose to use this option, just be aware of the security tradeoffs you’re making.
@@ -222,3 +223,7 @@ Jay-Z could easily support this by giving callers a way to plug-in a custom sign
 Jay-Z currently offers a way to amortize write latency and/or billing costs via a parameter that lets you specify how many times a data key can be used. It’d be nice to offer a way to amortize read latency and/or billing costs as well.
 
 This could be accomplished by introducing a data-key cache at the application layer. This of course reduces the level of security offered. And at the time of writing appears to be a fairly niche use-case, so it has not yet been implemented in Jay-Z.
+
+## Questions or suggesstions?
+
+Email us at <a href="mailto:engineering-blog@ginger.io">engineering-blog@ginger.io</a>
