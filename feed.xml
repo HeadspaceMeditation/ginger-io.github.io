@@ -1,4 +1,214 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://ginger-io.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ginger-io.github.io/" rel="alternate" type="text/html" /><updated>2020-04-08T18:34:37-07:00</updated><id>https://ginger-io.github.io/feed.xml</id><title type="html">Ginger engineering blog</title><subtitle></subtitle><entry><title type="html">Welcome to Jekyll!</title><link href="https://ginger-io.github.io/jekyll/update/2020/04/06/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-04-06T17:14:59-07:00</published><updated>2020-04-06T17:14:59-07:00</updated><id>https://ginger-io.github.io/jekyll/update/2020/04/06/welcome-to-jekyll</id><content type="html" xml:base="https://ginger-io.github.io/jekyll/update/2020/04/06/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://ginger-io.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ginger-io.github.io/" rel="alternate" type="text/html" /><updated>2020-04-09T14:42:59-07:00</updated><id>https://ginger-io.github.io/feed.xml</id><title type="html">Ginger engineering blog</title><subtitle></subtitle><entry><title type="html">Introducing Jay-Z</title><link href="https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z.html" rel="alternate" type="text/html" title="Introducing Jay-Z" /><published>2020-04-09T00:00:00-07:00</published><updated>2020-04-09T00:00:00-07:00</updated><id>https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z</id><content type="html" xml:base="https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z.html">&lt;h2 id=&quot;gingers-typescript-library-for-application-layer-encryption&quot;&gt;Ginger’s TypeScript library for application-layer encryption&lt;/h2&gt;
+
+&lt;p&gt;As engineers we have a moral responsibility to protect the sensitive data we store. And that can be a lot of responsibility since mass data leaks are a &lt;a href=&quot;https://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/&quot;&gt;huge problem&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We’re a (mental) healthcare company that stores clinical data. So we care deeply about this. And that’s why we’re excited to give you a sneak preview of our new open source library: &lt;strong&gt;&lt;a href=&quot;https://github.com/ginger-io/jay-z&quot;&gt;Jay-Z&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;With Jay-Z you’ve 99 security problems. But application-layer encryption ain’t one :-)!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Jay-Z is a TypeScript library that makes application-layer encryption super easy. It’s built with &lt;a href=&quot;https://libsodium.gitbook.io/doc/&quot;&gt;libsodium&lt;/a&gt; and supports &lt;a href=&quot;https://aws.amazon.com/kms/&quot;&gt;AWS KMS&lt;/a&gt; out of the box. It’s primarily intended for use with “noSQL” data stores, like &lt;a href=&quot;https://aws.amazon.com/dynamodb/&quot;&gt;DynamoDB&lt;/a&gt;, but it can be used for other purposes as well (e.g. storing data in S3).&lt;/p&gt;
+
+&lt;h2 id=&quot;whats-application-level-encryption-why-is-it-important&quot;&gt;What’s application-level encryption? Why is it important?&lt;/h2&gt;
+
+&lt;p&gt;AWS offers an encryption-at-rest feature for DynamoDB, RDS and S3. This is good. You should turn it on.&lt;/p&gt;
+
+&lt;p&gt;But it’s not sufficient protection for your more sensitive data.&lt;/p&gt;
+
+&lt;p&gt;The problem is that these features encrypt data &lt;em&gt;after&lt;/em&gt; it arrives at the AWS service and decrypt it &lt;em&gt;before&lt;/em&gt; sending an API response. This results in anybody with AWS console (or API) access to that service being able to view all your data in plaintext.&lt;/p&gt;
+
+&lt;p&gt;Of course, you can lock down these permissions via IAM. But somebody is almost certainly going to wind up with &lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt; permissions that were only supposed to be “temporary” - e.g. somebody had to fix a bug in production and forgot to release their creds.&lt;/p&gt;
+
+&lt;p&gt;It’s much safer to encrypt and decrypt data at the application layer, using keys the storage layer doesn’t have access to. This ensures that you need both IAM permission to the service and access to the encryption key(s).&lt;/p&gt;
+
+&lt;p&gt;This is what Jay-Z does.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-does-jay-z-work&quot;&gt;How does Jay-Z work?&lt;/h2&gt;
+
+&lt;p&gt;Jay-Z encrypts and decrypts JSON objects. And its API is quite simple just &lt;code class=&quot;highlighter-rouge&quot;&gt;encryptItem&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;decryptItem&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;encryptitem&quot;&gt;EncryptItem&lt;/h3&gt;
+
+&lt;p&gt;When you call &lt;code class=&quot;highlighter-rouge&quot;&gt;encryptItem&lt;/code&gt;, you specify a set of fields to encrypt and the others are left as plaintext (e.g. if persisting to DynamoDB, you don’t want to encrypt your object’s primary key, sort key or indexed attributes).&lt;/p&gt;
+
+&lt;p&gt;By default, Jay-Z encrypts the specified fields of your JSON object with a unique data key. This key is generated by a configured &lt;code class=&quot;highlighter-rouge&quot;&gt;DataKeyProvider&lt;/code&gt; class. AWS KMS is intended to be the “default” key provider (Jay-Z ships with a &lt;code class=&quot;highlighter-rouge&quot;&gt;KMSDataKeyProvider&lt;/code&gt;), but you can roll your own too.&lt;/p&gt;
+
+&lt;p&gt;When a &lt;code class=&quot;highlighter-rouge&quot;&gt;DataKeyProvider&lt;/code&gt; generates a data key, it returns two versions of that key - one encrypted (e.g. using a KMS Master Key), and one plaintext.&lt;/p&gt;
+
+&lt;p&gt;The plaintext key is used to encrypt each specified field of your JSON item using libsodium’s &lt;a href=&quot;https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox&quot;&gt;secretbox&lt;/a&gt;. And the encrypted data key, nonce and other metadata required for decryption are appended to your JSON item in a &lt;code class=&quot;highlighter-rouge&quot;&gt;__jayz__metadata&lt;/code&gt; field.&lt;/p&gt;
+
+&lt;h3 id=&quot;decryptitem&quot;&gt;DecryptItem&lt;/h3&gt;
+
+&lt;p&gt;When you call decryptItem Jay-Z looks for a &lt;code class=&quot;highlighter-rouge&quot;&gt;__jayz__metadata&lt;/code&gt; field on your item, asks the &lt;code class=&quot;highlighter-rouge&quot;&gt;DataKeyProvider&lt;/code&gt; to decrypt the data key. And then uses the (now) plaintext data key to decrypt each field in your JSON item.&lt;/p&gt;
+
+&lt;h3 id=&quot;diagram&quot;&gt;Diagram&lt;/h3&gt;
+
+&lt;p&gt;Let’s look at a diagram of this flow (&lt;a href=&quot;https://github.com/ginger-io/jay-z/raw/master/diagram.svg?sanitize=true&quot;&gt;full size&lt;/a&gt;):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/ginger-io/jay-z/raw/master/diagram.svg?sanitize=true&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;what-does-jay-zs-api-look-like&quot;&gt;What does Jay-Z’s API look like?&lt;/h2&gt;
+
+&lt;p&gt;Now that we’ve covered how Jay-Z works, let’s take a look at how to use it. For illustrative purposes, assume we want to use AWS KMS and the included &lt;code class=&quot;highlighter-rouge&quot;&gt;KMSDataKeyProvider&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;1-get-yourself-a-jay-z&quot;&gt;1. Get yourself a Jay-Z&lt;/h3&gt;
+
+&lt;p&gt;The first thing you need to do is get a JayZ object:&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMS&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;aws-sdk&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMSDataKeyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JayZ&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;@ginger.io/jay-z&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;kmsKeyId&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// the KMS key id or arn you want to use&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMSDataKeyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;kmsKeyId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;2-encrypt-a-bank-account&quot;&gt;2. Encrypt a bank account&lt;/h3&gt;
+
+&lt;p&gt;Then we can start encrypting JSON objects, like a &lt;code class=&quot;highlighter-rouge&quot;&gt;BankAccount&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bankAccount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;BankAccount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;accountNumber&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;an-123&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;routingNumber&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;rn-123&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;encryptedItem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;encryptItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;bankAccount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;accountNumber&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;routingNumber&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// fields to encrypt&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;note&quot;&gt;Note&lt;/h4&gt;
+
+&lt;p&gt;Jay-Z does not suffer foolish mistakes (like typos).&lt;/p&gt;
+
+&lt;p&gt;Thus the TypeScript type for &lt;code class=&quot;highlighter-rouge&quot;&gt;encryptedItem&lt;/code&gt; (above) is correctly inferred. The &lt;code class=&quot;highlighter-rouge&quot;&gt;accountNumber&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;routingNumber&lt;/code&gt; fields are now (encrypted) binary data and thus have a type of &lt;code class=&quot;highlighter-rouge&quot;&gt;UInt8Array&lt;/code&gt;. The id field will be untouched and still be a &lt;code class=&quot;highlighter-rouge&quot;&gt;string&lt;/code&gt;. And the &lt;code class=&quot;highlighter-rouge&quot;&gt;__jayz__metadata&lt;/code&gt; field will be present in the return type as well.&lt;/p&gt;
+
+&lt;p&gt;So when you serialize your data to your data store, you can rest assured that you properly process all of the necessary fields.&lt;/p&gt;
+
+&lt;h3 id=&quot;3-decrypt-a-bank-account&quot;&gt;3. Decrypt a bank account&lt;/h3&gt;
+
+&lt;p&gt;Finally, decryption with Jay-Z is easy, just 1 line:&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;decryptedItem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;decryptItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;encrypted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;providing-your-own-datakeyprovider&quot;&gt;Providing your own DataKeyProvider&lt;/h2&gt;
+
+&lt;p&gt;If you don’t want to use KMS (or can’t because you’re not on AWS), you can provide your own. Just implement the DataKeyProvider interface, which is quite simple:&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DataKeyProvider&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;generateDataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;DataKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;decryptDataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;encryptedDataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DataKey&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;dataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;encryptedDataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Once you have your CustomKeyProvider, you can plug it into Jay-Z like so:&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;CustomDataKeyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(...)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;providing-your-own-encryptor&quot;&gt;Providing your own Encryptor&lt;/h2&gt;
+
+&lt;p&gt;Recall that Jay-Z uses libsodium’s secretbox to handle the underlying encryption and decryption operations. Given libsodium is one of the most often recommended libraries by cryptographers - you should just use this if you can.&lt;/p&gt;
+
+&lt;p&gt;But if for some reason you need to use a different encryption or decryption strategy, you can implement the Encryptor interface:&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Encryptor&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;scheme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EncryptionScheme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;nx&quot;&gt;encrypt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EncryptParams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;EncryptResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;nx&quot;&gt;decrypt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DecryptParams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;DecryptResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EncryptParams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;fieldsToEncrypt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;dataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EncryptResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;encryptedItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ItemWithEncryptedFields&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;nonce&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DecryptParams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;encryptedItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ItemWithEncryptedFields&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;fieldsToDecrypt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;dataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;nonce&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DecryptResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;decryptedItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And once we have our CustomEncryptor, we can plug it in like so:&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;CustomDataKeyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(...)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;encryptor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;CustomEncryptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(...)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;encryptor&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;amortizing-write-latency-and-costs&quot;&gt;Amortizing write latency and costs&lt;/h2&gt;
+
+&lt;p&gt;Recall that by default Jay-Z requests a fresh data key from the configured DataKeyProvider on every encryption. This is the most secure option, which is why it is the default.&lt;/p&gt;
+
+&lt;p&gt;But for some high-write use-cases, you might wish to trade security in order to reduce network latency and/or billing costs. KMS is both fairly fast and fairly cheap, but you might not be using KMS.&lt;/p&gt;
+
+&lt;p&gt;So Jay-Z allows you to amortize these costs by reusing data keys across encryption operations via its maxUsesPerDataKey parameter.&lt;/p&gt;
+
+&lt;p&gt;Setting this to a value of N means that Jay-Z will reuse a particular data key a maximum of N times before requesting a new one. For example we could set this to 100:&lt;/p&gt;
+
+&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMSDataKeyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;kmsKeyId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;maxUsesPerDataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you choose to use this option, just be aware of the security tradeoffs you’re making.&lt;/p&gt;
+
+&lt;h2 id=&quot;use-cases-for-jay-z&quot;&gt;Use cases for Jay-Z&lt;/h2&gt;
+
+&lt;h3 id=&quot;dynamodb-or-other-nosql-databases&quot;&gt;DynamoDB or other “NoSQL” databases&lt;/h3&gt;
+
+&lt;p&gt;Jay-Z was originally designed with DynamoDB in mind. Thus it is a natural fit to use here. You can use Jay-Z as a standalone library but we have an upcoming blog-post that you’ll want to stay-tuned for (hint, it involves another library we’re calling Beyoncé).&lt;/p&gt;
+
+&lt;h3 id=&quot;s3&quot;&gt;S3&lt;/h3&gt;
+
+&lt;p&gt;If you’re storing JSON documents in S3 - or you store your data in S3 in another format, but your domain objects are JSON or JSON-like - Jay-Z might be a good fit for you. However if you’re using a binary format - Jay-Z isn’t going to be a great fit for your use-case.&lt;/p&gt;
+
+&lt;h3 id=&quot;sql-orms&quot;&gt;SQL-ORMs&lt;/h3&gt;
+
+&lt;p&gt;Jay-Z could potentially be used as “middleware” to a SQL-like ORM whose domain objects are either JSON or JS/TypeScript classes. But it’s important to point out that this is much less of a natural fit than with “NoSQL” datastores as the middleware would have to implement a strategy to persist the &lt;code class=&quot;highlighter-rouge&quot;&gt;__jayz__metadata&lt;/code&gt; field and rehydrate it into domain objects - e.g. either as a column on each “model” or in a special table.&lt;/p&gt;
+
+&lt;h2 id=&quot;future-work&quot;&gt;Future work&lt;/h2&gt;
+
+&lt;p&gt;There’s a few things that would improve Jay-Z that we’re currently thinking about. No promises as to our road-map, but here’s what’s on our minds:&lt;/p&gt;
+
+&lt;h3 id=&quot;custom-signatures&quot;&gt;Custom signatures&lt;/h3&gt;
+
+&lt;p&gt;Jay-Z’s default encryption strategy uses authenticated encryption. But for some use-cases you might want to calculate a custom signature (e.g. HMAC) that includes additional data that you care about.&lt;/p&gt;
+
+&lt;p&gt;Jay-Z could easily support this by giving callers a way to plug-in a custom signature, which could be appended to the &lt;code class=&quot;highlighter-rouge&quot;&gt;__jayz__metadata&lt;/code&gt; field. And verified prior to attempting to decrypt an item.&lt;/p&gt;
+
+&lt;h3 id=&quot;an-optional-feature-to-amortize-read-latency-andor-billing-costs&quot;&gt;An optional feature to amortize read latency and/or billing costs&lt;/h3&gt;
+
+&lt;p&gt;Jay-Z currently offers a way to amortize write latency and/or billing costs via a parameter that lets you specify how many times a data key can be used. It’d be nice to offer a way to amortize read latency and/or billing costs as well.&lt;/p&gt;
+
+&lt;p&gt;This could be accomplished by introducing a data-key cache at the application layer. This of course reduces the level of security offered. And at the time of writing appears to be a fairly niche use-case, so it has not yet been implemented in Jay-Z.&lt;/p&gt;</content><author><name></name></author><summary type="html">Ginger’s TypeScript library for application-layer encryption</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="https://ginger-io.github.io/jekyll/update/2020/04/06/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-04-06T17:14:59-07:00</published><updated>2020-04-06T17:14:59-07:00</updated><id>https://ginger-io.github.io/jekyll/update/2020/04/06/welcome-to-jekyll</id><content type="html" xml:base="https://ginger-io.github.io/jekyll/update/2020/04/06/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
 
 &lt;p&gt;Jekyll requires blog post files to be named according to the following format:&lt;/p&gt;
 
