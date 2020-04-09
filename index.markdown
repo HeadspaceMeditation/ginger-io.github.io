@@ -5,4 +5,4 @@
 layout: home
 ---
 
-Welcome to Ginger's engineering blog!
+<h1>Ginger Engineering</h1>

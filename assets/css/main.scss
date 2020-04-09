@@ -1,0 +1,56 @@
+---
+---
+
+@import "syntax-highlighting.css";
+@import "colors.scss";
+@import "typography.scss";
+@import "nav.scss";
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.content {
+  max-width: 700px;
+
+  pre {
+    text-align: left;
+  }
+
+  a {
+    color: $leaf;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.home {
+  .post-list {
+    margin: 0;
+    padding: 0;
+    li {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .post-link {
+      padding: 1rem;
+      width: 100%;
+      transition: background-color 0.25s ease-in-out;
+      &:hover {
+        background: lighten($tumeric, 5%);
+        color: #fff;
+        text-decoration: none;
+      }
+    }
+
+    .post-meta {
+      margin-right: 1rem;
+    }
+  }
+}
