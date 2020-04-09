@@ -8,6 +8,8 @@
 
 @font-face { font-family: "Untitled Sans"; src: url(/fonts/Untitled_Sans_Medium.ttf); font-weight: 500; }
 
+a, p { font-family: "Untitled sans", sans-serif; }
+
 .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 { font-family: "Heldane display", sans-serif; }
 
 .content h1 { margin: 0.67em 0; margin-top: 0px; margin-bottom: 25px; font-size: 72px; line-height: 1.1em; font-weight: 700; text-transform: none; color: #000; }
@@ -18,7 +20,7 @@
 
 .content h4 { margin-top: 40px; }
 
-.content p { font-family: "Untitled sans", sans-serif; margin-top: 0; margin-bottom: 10px; color: #000; font-size: 18px; line-height: 30px; font-weight: 300; text-align: left; letter-spacing: 0px; }
+.content p { margin-top: 0; margin-bottom: 10px; color: #000; font-size: 18px; line-height: 30px; font-weight: 300; text-align: left; letter-spacing: 0px; }
 
 .content { max-width: 650px; }
 
@@ -36,11 +38,19 @@
 
 .content a:hover { text-decoration: underline; }
 
-.mainNav { margin-bottom: 2rem; padding: 1rem 0; max-height: 60px; background: #fff; box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.15); }
+.mainNav { display: flex; align-items: center; margin-bottom: 2rem; padding: 2rem 0; max-height: 60px; background: #fff; box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.15); }
 
-.mainNav .navContent { max-width: 650px; margin: 0 auto; }
+.mainNav .navContent { display: flex; width: 100%; justify-content: space-between; max-width: 940px; margin: 0 auto; }
 
-.mainNav .navContent img { max-height: 30px; object-fit: contain; }
+.mainNav .navContent img { margin-top: 3px; max-height: 30px; object-fit: contain; }
+
+.mainNav .navContent .menu { display: flex; align-items: center; margin: 0; padding: 0; }
+
+.mainNav .navContent .menu li { margin: 0 1rem; }
+
+.mainNav .navContent .menu li a { padding: 5px; color: #222222; border-bottom: 2px solid transparent; }
+
+.mainNav .navContent .menu li a:hover { border-bottom-color: #dea531; }
 
 * { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 

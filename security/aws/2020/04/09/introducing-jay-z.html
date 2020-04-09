@@ -11,15 +11,19 @@
     <link rel="stylesheet" href="/assets/css/main.css" media="all" />
   </head>
   <body>
-      <nav class="mainNav">
-        <div class="navContent">
-          <a href='/'>
+    <nav class="mainNav">
+      <div class="navContent">
+        <a href="/">
           <img src="/assets/images/logo.svg" />
-          </a>
-        </div>
-      </nav>
+        </a>
 
-    </div>
+        <ul class="menu">
+          <li><a href="/">Home</a></li>
+          <li><a href="/feed.xml">RSS</a></li>
+        </ul>
+      </div>
+    </nav>
+
     <div class="container content">
       <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
@@ -27,7 +31,7 @@
     <h1 class="post-title p-name" itemprop="name headline">Introducing Jay-Z</h1>
     <p class="post-meta">
       <time class="dt-published" datetime="2020-04-09T00:00:00-07:00" itemprop="datePublished">Apr 9, 2020
-      </time></p>
+      </time>• <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">Josh Carver</span></span></p>
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
@@ -89,12 +93,12 @@
 
 <p>The first thing you need to do is get a JayZ object:</p>
 
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">KMS</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">aws-sdk</span><span class="dl">"</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">KMSDataKeyProvider</span><span class="p">,</span> <span class="nx">JayZ</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@ginger.io/jay-z</span><span class="dl">"</span><span class="p">;</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">KMS</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">aws-sdk</span><span class="dl">"</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">KMSDataKeyProvider</span><span class="p">,</span> <span class="nx">JayZ</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@ginger.io/jay-z</span><span class="dl">"</span>
 
-<span class="kd">const</span> <span class="nx">kmsKeyId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">...</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// the KMS key id or arn you want to use</span>
-<span class="kd">const</span> <span class="nx">keyProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">KMSDataKeyProvider</span><span class="p">(</span><span class="nx">kmsKeyId</span><span class="p">,</span> <span class="k">new</span> <span class="nx">KMS</span><span class="p">());</span>
-<span class="kd">const</span> <span class="nx">jayZ</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JayZ</span><span class="p">({</span> <span class="nx">keyProvider</span> <span class="p">});</span>
+<span class="kd">const</span> <span class="nx">kmsKeyId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">...</span><span class="dl">"</span> <span class="c1">// the KMS key id or arn you want to use</span>
+<span class="kd">const</span> <span class="nx">keyProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">KMSDataKeyProvider</span><span class="p">(</span><span class="nx">kmsKeyId</span><span class="p">,</span> <span class="k">new</span> <span class="nx">KMS</span><span class="p">())</span>
+<span class="kd">const</span> <span class="nx">jayZ</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JayZ</span><span class="p">({</span> <span class="nx">keyProvider</span> <span class="p">})</span>
 </code></pre></div></div>
 
 <h3 id="2-encrypt-a-bank-account">2. Encrypt a bank account</h3>
@@ -105,12 +109,12 @@
   <span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
   <span class="na">accountNumber</span><span class="p">:</span> <span class="dl">"</span><span class="s2">an-123</span><span class="dl">"</span><span class="p">,</span>
   <span class="na">routingNumber</span><span class="p">:</span> <span class="dl">"</span><span class="s2">rn-123</span><span class="dl">"</span><span class="p">,</span>
-<span class="p">};</span>
+<span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">encryptedItem</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">jayZ</span><span class="p">.</span><span class="nx">encryptItem</span><span class="p">(</span>
   <span class="nx">bankAccount</span><span class="p">,</span>
   <span class="p">[</span><span class="dl">"</span><span class="s2">accountNumber</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">routingNumber</span><span class="dl">"</span><span class="p">]</span> <span class="c1">// fields to encrypt</span>
-<span class="p">);</span>
+<span class="p">)</span>
 </code></pre></div></div>
 
 <h4 id="note">Note</h4>
@@ -125,7 +129,7 @@
 
 <p>Finally, decryption with Jay-Z is easy, just 1 line:</p>
 
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">decryptedItem</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">jayZ</span><span class="p">.</span><span class="nx">decryptItem</span><span class="p">(</span><span class="nx">encrypted</span><span class="p">);</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">decryptedItem</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">jayZ</span><span class="p">.</span><span class="nx">decryptItem</span><span class="p">(</span><span class="nx">encrypted</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h2 id="providing-your-own-datakeyprovider">Providing your own DataKeyProvider</h2>
@@ -133,14 +137,14 @@
 <p>If you don’t want to use KMS (or can’t because you’re not on AWS), you can provide your own. Just implement the DataKeyProvider interface, which is quite simple:</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">DataKeyProvider</span> <span class="p">{</span>
-  <span class="nx">generateDataKey</span><span class="p">():</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">DataKey</span><span class="o">&gt;</span><span class="p">;</span>
-  <span class="nx">decryptDataKey</span><span class="p">(</span><span class="nx">encryptedDataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span><span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nb">Uint8Array</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="nx">generateDataKey</span><span class="p">():</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">DataKey</span><span class="o">&gt;</span>
+  <span class="nx">decryptDataKey</span><span class="p">(</span><span class="nx">encryptedDataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span><span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nb">Uint8Array</span><span class="o">&gt;</span>
 <span class="p">}</span>
 
 <span class="k">export</span> <span class="nx">type</span> <span class="nx">DataKey</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">dataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span><span class="p">;</span>
-  <span class="nl">encryptedDataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span><span class="p">;</span>
-<span class="p">};</span>
+  <span class="na">dataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+  <span class="na">encryptedDataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 <p>Once you have your CustomKeyProvider, you can plug it into Jay-Z like so:</p>
@@ -156,38 +160,38 @@
 <p>But if for some reason you need to use a different encryption or decryption strategy, you can implement the Encryptor interface:</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">Encryptor</span> <span class="p">{</span>
-  <span class="nx">readonly</span> <span class="nx">scheme</span><span class="p">:</span> <span class="nx">EncryptionScheme</span><span class="p">;</span>
+  <span class="nx">readonly</span> <span class="nx">scheme</span><span class="p">:</span> <span class="nx">EncryptionScheme</span>
 
   <span class="nx">encrypt</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span> <span class="kd">extends</span> <span class="nx">keyof</span> <span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nx">params</span><span class="p">:</span> <span class="nx">EncryptParams</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;</span>
-  <span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">EncryptResult</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+  <span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">EncryptResult</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;&gt;</span>
 
   <span class="nx">decrypt</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span> <span class="kd">extends</span> <span class="nx">keyof</span> <span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nx">params</span><span class="p">:</span> <span class="nx">DecryptParams</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;</span>
-  <span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">DecryptResult</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+  <span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">DecryptResult</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;&gt;</span>
 <span class="p">}</span>
 
 <span class="k">export</span> <span class="nx">type</span> <span class="nx">EncryptParams</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span> <span class="kd">extends</span> <span class="nx">keyof</span> <span class="nx">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">item</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
-  <span class="nl">fieldsToEncrypt</span><span class="p">:</span> <span class="nx">K</span><span class="p">[];</span>
-  <span class="nl">dataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span><span class="p">;</span>
-<span class="p">};</span>
+  <span class="na">item</span><span class="p">:</span> <span class="nx">T</span>
+  <span class="na">fieldsToEncrypt</span><span class="p">:</span> <span class="nx">K</span><span class="p">[]</span>
+  <span class="na">dataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+<span class="p">}</span>
 
 <span class="k">export</span> <span class="nx">type</span> <span class="nx">EncryptResult</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span> <span class="kd">extends</span> <span class="nx">keyof</span> <span class="nx">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">encryptedItem</span><span class="p">:</span> <span class="nx">ItemWithEncryptedFields</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;</span><span class="p">;</span>
-  <span class="nl">nonce</span><span class="p">:</span> <span class="nb">Uint8Array</span><span class="p">;</span>
-<span class="p">};</span>
+  <span class="na">encryptedItem</span><span class="p">:</span> <span class="nx">ItemWithEncryptedFields</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;</span>
+  <span class="na">nonce</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+<span class="p">}</span>
 
 <span class="k">export</span> <span class="nx">type</span> <span class="nx">DecryptParams</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span> <span class="kd">extends</span> <span class="nx">keyof</span> <span class="nx">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">encryptedItem</span><span class="p">:</span> <span class="nx">ItemWithEncryptedFields</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;</span><span class="p">;</span>
-  <span class="nl">fieldsToDecrypt</span><span class="p">:</span> <span class="nx">K</span><span class="p">[];</span>
-  <span class="nl">dataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span><span class="p">;</span>
-  <span class="nl">nonce</span><span class="p">:</span> <span class="nb">Uint8Array</span><span class="p">;</span>
-<span class="p">};</span>
+  <span class="na">encryptedItem</span><span class="p">:</span> <span class="nx">ItemWithEncryptedFields</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;</span>
+  <span class="na">fieldsToDecrypt</span><span class="p">:</span> <span class="nx">K</span><span class="p">[]</span>
+  <span class="na">dataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+  <span class="na">nonce</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+<span class="p">}</span>
 
 <span class="k">export</span> <span class="nx">type</span> <span class="nx">DecryptResult</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">decryptedItem</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
-<span class="p">};</span>
+  <span class="na">decryptedItem</span><span class="p">:</span> <span class="nx">T</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 <p>And once we have our CustomEncryptor, we can plug it in like so:</p>
@@ -207,8 +211,8 @@
 
 <p>Setting this to a value of N means that Jay-Z will reuse a particular data key a maximum of N times before requesting a new one. For example we could set this to 100:</p>
 
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">keyProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">KMSDataKeyProvider</span><span class="p">(</span><span class="nx">kmsKeyId</span><span class="p">,</span> <span class="k">new</span> <span class="nx">KMS</span><span class="p">());</span>
-<span class="kd">const</span> <span class="nx">jayZ</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JayZ</span><span class="p">({</span> <span class="nx">keyProvider</span><span class="p">,</span> <span class="na">maxUsesPerDataKey</span><span class="p">:</span> <span class="mi">100</span> <span class="p">});</span>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">keyProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">KMSDataKeyProvider</span><span class="p">(</span><span class="nx">kmsKeyId</span><span class="p">,</span> <span class="k">new</span> <span class="nx">KMS</span><span class="p">())</span>
+<span class="kd">const</span> <span class="nx">jayZ</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JayZ</span><span class="p">({</span> <span class="nx">keyProvider</span><span class="p">,</span> <span class="na">maxUsesPerDataKey</span><span class="p">:</span> <span class="mi">100</span> <span class="p">})</span>
 </code></pre></div></div>
 
 <p>If you choose to use this option, just be aware of the security tradeoffs you’re making.</p>
@@ -242,6 +246,10 @@
 <p>Jay-Z currently offers a way to amortize write latency and/or billing costs via a parameter that lets you specify how many times a data key can be used. It’d be nice to offer a way to amortize read latency and/or billing costs as well.</p>
 
 <p>This could be accomplished by introducing a data-key cache at the application layer. This of course reduces the level of security offered. And at the time of writing appears to be a fairly niche use-case, so it has not yet been implemented in Jay-Z.</p>
+
+<h2 id="questions-or-suggesstions">Questions or suggesstions?</h2>
+
+<p>Email us at <a href="mailto:engineering-blog@ginger.io">engineering-blog@ginger.io</a></p>
 
   </div><a class="u-url" href="/security/aws/2020/04/09/introducing-jay-z.html" hidden></a>
 </article>
