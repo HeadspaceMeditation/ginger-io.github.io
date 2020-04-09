@@ -4,27 +4,13 @@
 @import "syntax-highlighting.css";
 @import "colors.scss";
 @import "typography.scss";
+@import "layout.scss";
 @import "nav.scss";
 
 * {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.content {
-  max-width: 700px;
-
-  pre {
-    text-align: left;
-  }
-
-  a {
-    color: $leaf;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 }
 
 .home {
@@ -43,7 +29,7 @@
       width: 100%;
       transition: background-color 0.25s ease-in-out;
       &:hover {
-        background: lighten($tumeric, 5%);
+        background: lighten($leaf, 5%);
         color: #fff;
         text-decoration: none;
       }

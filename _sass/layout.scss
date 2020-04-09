@@ -1,0 +1,16 @@
+$maxWidth: 650px; // a "comfortable" reading width
+
+.content {
+  max-width: $maxWidth;
+
+  pre {
+    text-align: left;
+  }
+
+  a {
+    color: $leaf;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
