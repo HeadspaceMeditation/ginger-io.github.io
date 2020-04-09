@@ -20,6 +20,8 @@ Tooling
 
 ## Edit Cycle
 
+See [Jekyll posts](https://jekyllrb.com/docs/posts/) for details on how to add a new post.
+
 Run `jekyll serve` to build the site and serve it locally.
 
 ## Publishing
