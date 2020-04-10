@@ -8,17 +8,19 @@ author: Josh Carver
 
 ## Ginger’s TypeScript library for application-layer encryption
 
-As engineers we have a moral responsibility to protect the sensitive data we store. And that can be a lot of responsibility since mass data leaks are a [huge problem](https://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/).
+Mass data leaks are a [huge problem](https://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/).
 
-We're a (mental) healthcare company that stores clinical data. So we care deeply about this. And that's why we're excited to give you a sneak preview of our new open source library: **[Jay-Z](https://github.com/ginger-io/jay-z)**.
+As engineers, we have a moral obligation to protect our users' data in a way that minimizes the risk of it being exposed in a mass data leak. And our responsibility scales with the sensitivity of the data we collect. Ginger is a mental healthcare provider that stores, among other things, psychiatric diagnoseses - so we care deeply about protecting our members' data.
 
-> With Jay-Z you’ve 99 security problems. But application-layer encryption ain’t one :-)!
+Strong encryption of data at rest is one of the best ways protect against a mass data leak. But many encryption libraries are infamously difficult to use. And that's why we're excited to give you a sneak preview of **[Jay-Z](https://github.com/ginger-io/jay-z)**.
 
-Jay-Z is a TypeScript library that makes application-layer encryption super easy. It's built with [libsodium](https://libsodium.gitbook.io/doc/) and supports [AWS KMS](https://aws.amazon.com/kms/) out of the box. It's primarily intended for use with “noSQL” data stores, like [DynamoDB](https://aws.amazon.com/dynamodb/), but it can be used for other purposes as well (e.g. storing data in S3).
+Jay-Z is our open-source TypeScript library that makes application-layer encryption super easy. It's built with [libsodium](https://libsodium.gitbook.io/doc/) and supports [AWS KMS](https://aws.amazon.com/kms/) out of the box. It's primarily intended for use with “noSQL” data stores, like [DynamoDB](https://aws.amazon.com/dynamodb/), but it can be used for other purposes as well (e.g. storing data in S3).
+
+> With Jay-Z you’ve got 99 security problems. But application-layer encryption ain’t one :-)!
 
 ## What’s application-level encryption? Why is it important?
 
-AWS offers an encryption-at-rest feature for DynamoDB, RDS and S3. This is good. You should turn it on.
+AWS offers an encryption-at-rest feature for DynamoDB, RDS and S3. This is good. Please turn it on!
 
 But it’s not sufficient protection for your more sensitive data.
 
