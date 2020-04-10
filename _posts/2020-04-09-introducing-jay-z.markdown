@@ -10,7 +10,7 @@ author: Josh Carver
 
 Mass data leaks are a [huge problem](https://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/).
 
-As engineers, we have a moral obligation to protect our users' data in a way that minimizes the risk of it being exposed in a mass data leak. And our responsibility grows with the sensitivity of the data we store. Ginger is a mental healthcare provider that stores, among other things, psychiatric diagnosis codes - so we care deeply about protecting our members' data.
+As engineers, we have a moral obligation to protect our users' data in a way that minimizes the risk of it being exposed in a mass data leak. And our responsibility scales with the sensitivity of the data we collect. Ginger is a mental healthcare provider that stores, among other things, psychiatric diagnoseses - so we care deeply about protecting our members' data.
 
 Strong encryption of data at rest is one of the best ways protect against a mass data leak. But many encryption libraries are infamously difficult to use. And that's why we're excited to give you a sneak preview of **[Jay-Z](https://github.com/ginger-io/jay-z)**.
 
