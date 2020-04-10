@@ -1,18 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://ginger-io.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ginger-io.github.io/" rel="alternate" type="text/html" /><updated>2020-04-09T15:32:43-07:00</updated><id>https://ginger-io.github.io/feed.xml</id><title type="html">Ginger engineering blog</title><subtitle></subtitle><entry><title type="html">Introducing Jay-Z</title><link href="https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z.html" rel="alternate" type="text/html" title="Introducing Jay-Z" /><published>2020-04-09T00:00:00-07:00</published><updated>2020-04-09T00:00:00-07:00</updated><id>https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z</id><content type="html" xml:base="https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z.html">&lt;h2 id=&quot;gingers-typescript-library-for-application-layer-encryption&quot;&gt;Ginger’s TypeScript library for application-layer encryption&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://ginger-io.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ginger-io.github.io/" rel="alternate" type="text/html" /><updated>2020-04-10T09:53:44-07:00</updated><id>https://ginger-io.github.io/feed.xml</id><title type="html">Ginger engineering blog</title><subtitle></subtitle><entry><title type="html">Introducing Jay-Z</title><link href="https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z.html" rel="alternate" type="text/html" title="Introducing Jay-Z" /><published>2020-04-09T00:00:00-07:00</published><updated>2020-04-09T00:00:00-07:00</updated><id>https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z</id><content type="html" xml:base="https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z.html">&lt;h2 id=&quot;gingers-typescript-library-for-application-layer-encryption&quot;&gt;Ginger’s TypeScript library for application-layer encryption&lt;/h2&gt;
 
-&lt;p&gt;As engineers we have a moral responsibility to protect the sensitive data we store. And that can be a lot of responsibility since mass data leaks are a &lt;a href=&quot;https://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/&quot;&gt;huge problem&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Mass data leaks are a &lt;a href=&quot;https://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/&quot;&gt;huge problem&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;We’re a (mental) healthcare company that stores clinical data. So we care deeply about this. And that’s why we’re excited to give you a sneak preview of our new open source library: &lt;strong&gt;&lt;a href=&quot;https://github.com/ginger-io/jay-z&quot;&gt;Jay-Z&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;As engineers, we have a moral obligation to protect our users’ data in a way that minimizes the risk of it being exposed in a mass data leak. And our responsibility scales with the sensitivity of the data we collect. Ginger is a mental healthcare provider that stores, among other things, psychiatric diagnoseses - so we care deeply about protecting our members’ data.&lt;/p&gt;
+
+&lt;p&gt;Strong encryption of data at rest is one of the best ways protect against a mass data leak. But many encryption libraries are infamously difficult to use. And that’s why we’re excited to give you a sneak preview of &lt;strong&gt;&lt;a href=&quot;https://github.com/ginger-io/jay-z&quot;&gt;Jay-Z&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Jay-Z is our open-source TypeScript library that makes application-layer encryption super easy. It’s built with &lt;a href=&quot;https://libsodium.gitbook.io/doc/&quot;&gt;libsodium&lt;/a&gt; and supports &lt;a href=&quot;https://aws.amazon.com/kms/&quot;&gt;AWS KMS&lt;/a&gt; out of the box. It’s primarily intended for use with “noSQL” data stores, like &lt;a href=&quot;https://aws.amazon.com/dynamodb/&quot;&gt;DynamoDB&lt;/a&gt;, but it can be used for other purposes as well (e.g. storing data in S3).&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;With Jay-Z you’ve 99 security problems. But application-layer encryption ain’t one :-)!&lt;/p&gt;
+  &lt;p&gt;With Jay-Z you’ve got 99 security problems. But application-layer encryption ain’t one :-)!&lt;/p&gt;
 &lt;/blockquote&gt;
-
-&lt;p&gt;Jay-Z is a TypeScript library that makes application-layer encryption super easy. It’s built with &lt;a href=&quot;https://libsodium.gitbook.io/doc/&quot;&gt;libsodium&lt;/a&gt; and supports &lt;a href=&quot;https://aws.amazon.com/kms/&quot;&gt;AWS KMS&lt;/a&gt; out of the box. It’s primarily intended for use with “noSQL” data stores, like &lt;a href=&quot;https://aws.amazon.com/dynamodb/&quot;&gt;DynamoDB&lt;/a&gt;, but it can be used for other purposes as well (e.g. storing data in S3).&lt;/p&gt;
 
 &lt;h2 id=&quot;whats-application-level-encryption-why-is-it-important&quot;&gt;What’s application-level encryption? Why is it important?&lt;/h2&gt;
 
-&lt;p&gt;AWS offers an encryption-at-rest feature for DynamoDB, RDS and S3. This is good. You should turn it on.&lt;/p&gt;
+&lt;p&gt;AWS offers an encryption-at-rest feature for DynamoDB, RDS and S3. This is good. Please turn it on!&lt;/p&gt;
 
 &lt;p&gt;But it’s not sufficient protection for your more sensitive data.&lt;/p&gt;
 

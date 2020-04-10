@@ -37,19 +37,21 @@
   <div class="post-content e-content" itemprop="articleBody">
     <h2 id="gingers-typescript-library-for-application-layer-encryption">Ginger’s TypeScript library for application-layer encryption</h2>
 
-<p>As engineers we have a moral responsibility to protect the sensitive data we store. And that can be a lot of responsibility since mass data leaks are a <a href="https://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/">huge problem</a>.</p>
+<p>Mass data leaks are a <a href="https://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/">huge problem</a>.</p>
 
-<p>We’re a (mental) healthcare company that stores clinical data. So we care deeply about this. And that’s why we’re excited to give you a sneak preview of our new open source library: <strong><a href="https://github.com/ginger-io/jay-z">Jay-Z</a></strong>.</p>
+<p>As engineers, we have a moral obligation to protect our users’ data in a way that minimizes the risk of it being exposed in a mass data leak. And our responsibility scales with the sensitivity of the data we collect. Ginger is a mental healthcare provider that stores, among other things, psychiatric diagnoseses - so we care deeply about protecting our members’ data.</p>
+
+<p>Strong encryption of data at rest is one of the best ways protect against a mass data leak. But many encryption libraries are infamously difficult to use. And that’s why we’re excited to give you a sneak preview of <strong><a href="https://github.com/ginger-io/jay-z">Jay-Z</a></strong>.</p>
+
+<p>Jay-Z is our open-source TypeScript library that makes application-layer encryption super easy. It’s built with <a href="https://libsodium.gitbook.io/doc/">libsodium</a> and supports <a href="https://aws.amazon.com/kms/">AWS KMS</a> out of the box. It’s primarily intended for use with “noSQL” data stores, like <a href="https://aws.amazon.com/dynamodb/">DynamoDB</a>, but it can be used for other purposes as well (e.g. storing data in S3).</p>
 
 <blockquote>
-  <p>With Jay-Z you’ve 99 security problems. But application-layer encryption ain’t one :-)!</p>
+  <p>With Jay-Z you’ve got 99 security problems. But application-layer encryption ain’t one :-)!</p>
 </blockquote>
-
-<p>Jay-Z is a TypeScript library that makes application-layer encryption super easy. It’s built with <a href="https://libsodium.gitbook.io/doc/">libsodium</a> and supports <a href="https://aws.amazon.com/kms/">AWS KMS</a> out of the box. It’s primarily intended for use with “noSQL” data stores, like <a href="https://aws.amazon.com/dynamodb/">DynamoDB</a>, but it can be used for other purposes as well (e.g. storing data in S3).</p>
 
 <h2 id="whats-application-level-encryption-why-is-it-important">What’s application-level encryption? Why is it important?</h2>
 
-<p>AWS offers an encryption-at-rest feature for DynamoDB, RDS and S3. This is good. You should turn it on.</p>
+<p>AWS offers an encryption-at-rest feature for DynamoDB, RDS and S3. This is good. Please turn it on!</p>
 
 <p>But it’s not sufficient protection for your more sensitive data.</p>
 
