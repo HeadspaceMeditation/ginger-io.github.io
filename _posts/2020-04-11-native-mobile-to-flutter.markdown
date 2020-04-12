@@ -10,23 +10,25 @@ author: Bobby Manuel
 
 We had two working native mobile applications, but lacked feature parity for Android and iOS users.
 
-Android and iOS development took place at different paces, with different architectural concerns, and varying levels of quality.  
+Android and iOS development took place at different paces, with varying quality and cost.
+
+Maintaining redundancy across two mobile teams required us to maintain a minimum of four developers on mobile rather than as few as two in a cross platform environment.
 
 **We wanted to achieve...**
 
-- feature parity.
-- a unified mobile team. 
-- doubled velocity. 
+- feature parity on both platforms.
+- a unified mobile team with higher quality peer reviews. 
+- increased velocity and reduced cost per feature. 
 - higher quality software. 
-- scalability of our mobile team.
+- scalability and redundancy of our mobile team.
 
-The cross-platform space has matured over the last several years: there were two great options to choose from, _Flutter_ and _React Native_.
+This seemed possible as the cross-platform mobile space has matured over the last year: there were two great options to choose from, _Flutter_ and _React Native_.
 
 ### Why did we choose Flutter? 
 
 The biggest challenge we faced was the timeline within which we had to complete the switch: 5 months.  Our native apps had 140,000 lines of code between the two platforms, so we needed to factor in development speed.
 
-**Regardless of our choice we would have to...**
+**Regardless of our choice our entire team would have to...**
 
 1. learn a new programming language
 2. learn a new UI framework
@@ -63,9 +65,9 @@ Although React Native is a clear winner for a javascript-centric development tea
 
 ### Choosing a State Management pattern that matched our needs.
 
-There were several state management architectures to choose from, but we opted for simplicity, the [Scoped Model pattern](https://github.com/brianegan/scoped_model).  The scoped model pattern is a simple change notifier pattern bound to Flutter's UI tree hierarchy.
+There were several state management architectures to choose from, but we opted for simplicity, the [Scoped Model pattern](https://github.com/brianegan/scoped_model).  The scoped model pattern is a simple change notifier pattern bound to Flutter's UI widget hierarchy.  Since its inception, it has gradually been replaced with the [Provider library] which is based on Scoped Model and has become the state management library most endorsed by the Flutter community.  We will most likely be migrating to the provider library within the next year.
 
-We use this pattern with our sql database to allow table subscriptions that trigger redraws on subscribed user interfaces.  We also use a very simple stream subscription pattern to propagate state changes that are not tied to database state.  Flutter provides the excellent [StreamBuilder class](https://api.flutter.dev/flutter/widgets/StreamBuilder-class.html) to facilitate state propagation.
+We use this pattern with our sql database to allow table subscriptions that trigger redraws on subscribed user interfaces when data is modified on disk.  We also use a very simple stream subscription pattern to propagate state changes that are not tied to database state.  Flutter provides the excellent [StreamBuilder class](https://api.flutter.dev/flutter/widgets/StreamBuilder-class.html) to facilitate state propagation.
 
 We evaluated a few other patterns mentioned in flutter resources, particularly Redux and BLoC, but chose the simplicity of Scoped Model over the granularity and associated complexity that the others presented.  
 
