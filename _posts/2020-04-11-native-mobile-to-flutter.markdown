@@ -65,7 +65,7 @@ Although React Native is a clear winner for a javascript-centric development tea
 
 ### Choosing a State Management pattern that matched our needs.
 
-There were several state management architectures to choose from, but we opted for simplicity, the [Scoped Model pattern](https://github.com/brianegan/scoped_model).  The scoped model pattern is a simple change notifier pattern bound to Flutter's UI widget hierarchy.  Since its inception, it has gradually been replaced with the [Provider library] which is based on Scoped Model and has become the state management library most endorsed by the Flutter community.  We will most likely be migrating to the provider library within the next year.
+There were several state management architectures to choose from, but we opted for simplicity, the [Scoped Model pattern](https://github.com/brianegan/scoped_model).  The scoped model pattern is a simple change notifier pattern bound to Flutter's UI widget hierarchy.  Since its inception, it has gradually been replaced with the [Provider library](https://github.com/rrousselGit/provide) which is based on Scoped Model and has become the state management library most endorsed by the Flutter community.  We will most likely be migrating to the provider library within the next year.
 
 We use this pattern with our sql database to allow table subscriptions that trigger redraws on subscribed user interfaces when data is modified on disk.  We also use a very simple stream subscription pattern to propagate state changes that are not tied to database state.  Flutter provides the excellent [StreamBuilder class](https://api.flutter.dev/flutter/widgets/StreamBuilder-class.html) to facilitate state propagation.
 
