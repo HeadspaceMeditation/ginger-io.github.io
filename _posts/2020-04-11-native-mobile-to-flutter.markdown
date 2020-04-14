@@ -92,11 +92,11 @@ After completing our application, we hired an external security group to do an a
 
 We didn't do that much to secure the app prior to the security test other than using an encrypted SQLite database and an excellent little plugin called [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage) which allowed us to write keys to the iOS Keychain or to Android Keystore.  We made sure that no data was persisted on the device in any location other than these two locations.  Aside from that, we mostly let the flutter and dart libraries do their thing. 
 
-All in all this was a pretty surprising result for us; we had initially expected to spend considerable time on a security deep dive after we were code complete.  So, imagine our suprise.
+All in all this was a pretty surprising result for us; we had initially expected to spend considerable time on a security deep dive after we were code complete.  So, imagine our surprise.
 
 ### Challenges?
 
-We really wanted to add a challenges section to this article to give it a little balance.  Unfortunately, no one on the mobile team could identify anything that was particularly challenging.  We'll keep an eye out for gnarly bugs moving forward and will write followups when we finally encounter a good challenge to document.
+We really wanted to add a challenges section to this article to give it a little balance.  Unfortunately, no one on the mobile team could identify anything that was particularly challenging.  We'll keep an eye out for gnarly bugs moving forward and will write follow ups when we finally encounter a good challenge to document.
 
 ### In Review ...
 
