@@ -6,15 +6,15 @@ categories: [mobile, flutter]
 author: Bobby Manuel 
 ---
 
-Over the last six months, the mobile team has been busy rewriting our native mobile apps into a shiny new cross-platform Flutter App!  The app has been live in production since February and we were excited to share the incredible gains we achieved.
+Over the last six months, the Ginger mobile team has been busy rewriting our native iOS and Android mobile apps into a shiny new cross-platform Flutter App!  The app has been live in production since February and we are excited to share the incredible gains we have achieved.
 
 ### The results are in!
 
-- 2 - 3x improvement in development velocity after the switch.  Developing in flutter for both platforms has turned out to be faster than developing for either one of the native platforms. 
+- 2 - 3x improvement in development velocity after the switch.
 - 98% shared code across both platforms.
 - Reduction from 140,000 lines of code to 31,000 lines of code.  This is despite launching with a brand new online/offline content system that did not exist in the native apps.
-- The application polish and user experience is on par with our native iOS application and superior to our native android application.
-- Most importantly, we experienced very few unexpected bugs or unpredictable behavior during our launch.
+- The application polish and user experience is on par with our native iOS application and easily superior to our native android application.
+- Most importantly, we experienced no Flutter related bugs or unpredictable behaviors after the launch.
 
 ### How long did this take? 
 
@@ -88,11 +88,13 @@ Dart/Flutter is definitely the easiest (of many) languages and UI frameworks I'v
 
 ### How secure is Flutter out of the box? 
 
-This was a pretty surprising result for us.  Our mobile app uses fairly standard technologies: a local SQLite database, REST API, and http long polling for chat, nothing too unusual.  We built with the standard flutter and dart libraries for the most par, and after completing our application, we hired an external security group to do an analysis on our application.  The analysis tests found no client side vulnerabilities.  The short answer is that **Flutter is secure out of the box**. 
+After completing our application, we hired an external security group to do an analysis on our application.  The analysis tests found no client side vulnerabilities.  The short answer is that **Flutter is secure out of the box**. 
+
+This was a pretty surprising result for us; we had initially figured we would have to do security deep dive after we were code complete.  Imagine our suprise.
 
 ### Challenges?
 
-We really wanted to add a challenges section to this article to give it a little balance but no one on the mobile team could identify anything that was particularly challenging.  We'll keep an eye out for gnarly bugs moving forward and will write followups when we finally encounter a good challenge to document. 
+We really wanted to add a challenges section to this article to give it a little balance.  Unfortunately, no one on the mobile team could identify anything that was particularly challenging.  We'll keep an eye out for gnarly bugs moving forward and will write followups when we finally encounter a good challenge to document.
 
 ### In Review ...
 
