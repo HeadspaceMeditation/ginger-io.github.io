@@ -28,7 +28,7 @@ We had two working native mobile applications, but lacked feature parity for And
 
 Android and iOS development took place at different paces, with varying quality and cost.
 
-Maintaining redundancy across two mobile teams required us to maintain a minimum of four to six developers rather than as few as two to three in a cross platform environment.
+Maintaining redundancy across two mobile teams would have required us to maintain four to six developers rather than as few as two to three in a cross platform environment.
 
 _Our key objectives were..._
 
@@ -38,19 +38,20 @@ _Our key objectives were..._
 - higher quality software. 
 - scalability and redundancy of our mobile team.
 
-This finally seemed possible as the cross-platform mobile space has matured dramatically over the last two years: there were two great options to choose from, _Flutter_ and _React Native_.
+This finally seemed possible as the cross-platform mobile space dramatically matured over the last two years: there were two great options to choose from, _Flutter_ and _React Native_.
 
 
-### Why did we choose Flutter? 
+### Why did we end up choosing Flutter? 
 
-The biggest challenge we faced was the timeline within which we had to complete the switch: 5 months.  Our native apps had 140,000 lines of code between the two platforms, so we needed to factor in development speed.
+The biggest challenge we faced was the timeline within which we had to complete the switch: just 5 short months.  Our native apps had 140,000 lines of code between the two platforms, so we needed to factor in both the learning curve and development speed.
 
 _Regardless of our choice our entire team would have to..._
 
-1. learn a new programming language
-2. learn a new UI framework
+1. learn a new programming language and UI framework
 3. add sufficient test coverage to confidently launch the application
 4. delivery a highly secure application. 
+
+At the end of the day, the developers called it.  Flutter felt much more approachable and less like web a web platform than React Native.
 
 #### Things we liked about React:
 
@@ -69,7 +70,7 @@ _Regardless of our choice our entire team would have to..._
 
 Flutter promises a very high percentage of shared cross-platform code across the platforms, but we still had to write some native code. 
 
-Flutter offers a very simple message passing api for communicating with native code.  We needed to use native integrations for the following relatively small group of features: 
+Flutter offers a very simple message passing API for communicating with native code.  We needed to use native integrations for the following relatively small group of features: 
 
 - Push notification.
 - Deep link handling.
@@ -83,15 +84,11 @@ We were able to write this functionality easily and communicate between Flutter 
 
 ### How was the learning curve?
 
-Dart/Flutter is definitely the easiest language and framework I've ever learned.  Within two weeks most of our engineers were up to speed and highly productive.  Everyone w
-
-### Continuous integration.
-
-We opted for CodeMagic as our CI service.  It was the only commercial service we found that had specialized flutter workflows that required no additional scrpting or configuration.  We were able to integrate our git workflow with CodeMagic in under an hour.
+Dart/Flutter is definitely the easiest (of many) languages and UI frameworks I've ever learned.  Within two weeks most of our engineers were up to speed and highly productive. 
 
 ### How secure is Flutter out of the box? 
 
-We hired an external penetration testing firm to do a security analysis on our application when we were done.  The penetration tests found no vulnerabilities in our Flutter application.
+This was a pretty surprising result for us.  Our mobile app uses fairly standard technologies: a local SQLite database, REST API, and http long polling for chat, nothing too unusual.  We built with the standard flutter and dart libraries for the most par, and after completing our application, we hired an external security group to do an analysis on our application.  The analysis tests found no client side vulnerabilities.  The short answer is that **Flutter is secure out of the box**. 
 
 ### Challenges?
 
