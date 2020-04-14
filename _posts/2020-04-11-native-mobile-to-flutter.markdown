@@ -49,7 +49,7 @@ _Regardless of our choice our entire team would have to..._
 
 1. learn a new programming language and UI framework
 3. add sufficient test coverage to confidently launch the application
-4. delivery a highly secure application. 
+4. deliver a highly secure application. 
 
 At the end of the day, the developers called it.  Flutter felt much more approachable and less like web a web platform than React Native.
 
@@ -88,9 +88,11 @@ Dart/Flutter is definitely the easiest (of many) languages and UI frameworks I'v
 
 ### How secure is Flutter out of the box? 
 
-After completing our application, we hired an external security group to do an analysis on our application.  The analysis tests found no client side vulnerabilities.  The short answer is that **Flutter is secure out of the box**. 
+After completing our application, we hired an external security group to do an analysis on our application.  The analysis tests found no client side vulnerabilities.  The short answer is that **Flutter is secure out of the box**.  
 
-This was a pretty surprising result for us; we had initially figured we would have to do security deep dive after we were code complete.  Imagine our suprise.
+We didn't do that much to secure the app prior to the security test other than using an encrypted SQLite database and an excellent little plugin called [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage) which allowed us to write keys to the iOS Keychain or to Android Keystore.  We made sure that no data was persisted on the device in any location other than these two locations.  Aside from that, we mostly let the flutter and dart libraries do their thing. 
+
+All in all this was a pretty surprising result for us; we had initially expected to spend considerable time on a security deep dive after we were code complete.  So, imagine our suprise.
 
 ### Challenges?
 
