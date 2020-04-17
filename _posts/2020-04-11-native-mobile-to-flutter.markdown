@@ -1,12 +1,14 @@
 ---
 layout: post
-title: "Looking Back on Our Migration from Native Mobile to Flutter."
+title: "Migrating from Native Mobile to Flutter."
 date: 2020-04-11
 categories: [mobile, flutter]
 author: Bobby Manuel 
 ---
 
 Over the last six months, the Ginger mobile team has been busy rewriting our native iOS and Android mobile apps into a shiny new cross-platform Flutter App!  The app has been live in production since February and we are excited to share the incredible gains we have achieved.
+
+![Ginger screenshots](/assets/images/ginger_home_screenshots.png)
 
 ### The results are in!
 
@@ -18,25 +20,26 @@ Over the last six months, the Ginger mobile team has been busy rewriting our nat
 
 ### How long did this take? 
 
-- Project spanned Aug 2019 - Dec 2019 
-- Initial release to Android users in February 2020.
+- Project spanned 5 months: Aug to Dec 2019 
+- Beta release to Android users in February 2020.
 - Release to all users Android + iOS March 2020.
 
 ### What problems were we hoping to solve?
 
-We had two working native mobile applications, but lacked feature parity for Android and iOS users.
+We are too small to have dedicated native iOS and Android apps.  Maintaining redundancy across two mobile teams would have required us to maintain four to six developers rather than as few as two to three in a cross platform environment.
 
-Android and iOS development took place at different paces, with varying quality and cost.
+The organizational complexity of maintaining iOS and Android teams created inefficiencies from engineering all the way up to marketing.  We hypothesized that having a single team and product would reduce organizational complexity, allowing us to move faster and have a more unified product experience.
 
-Maintaining redundancy across two mobile teams would have required us to maintain four to six developers rather than as few as two to three in a cross platform environment.
+Finally, our legacy native apps had accumulated years of technical debt; we were ready for a full rewrite.
 
 _Our key objectives were..._
 
-- feature parity on both platforms.
-- a unified mobile team with higher quality peer reviews. 
-- increased velocity and reduced cost per feature. 
-- higher quality software. 
-- scalability and redundancy of our mobile team.
+- to have one product rather than two (feature parity).
+- to simplify product communication within the team and externally. 
+- to unify the mobile team. 
+- to reduce the cost and time of each feature we ship. 
+- to improve the scalability and redundancy within our mobile team.
+- to increase the overall software quality of the product. 
 
 This finally seemed possible as the cross-platform mobile space dramatically matured over the last two years: there were two great options to choose from, _Flutter_ and _React Native_.
 
@@ -51,7 +54,7 @@ _Regardless of our choice our entire team would have to..._
 3. add sufficient test coverage to confidently launch the application
 4. deliver a highly secure application. 
 
-At the end of the day, the developers called it.  Flutter felt much more approachable and less like web a web platform than React Native.
+At the end of the day, the developers called it.  Flutter felt much more approachable and less like a web platform than React Native.
 
 #### Things we liked about React:
 
@@ -65,6 +68,7 @@ At the end of the day, the developers called it.  Flutter felt much more approac
 - Flutter offered clean, straight-forward conventions that were easy to learn, expressive and explicit.
 - Android Studio offered a turnkey development environment with performance monitoring tools, hot reload and step through debugging and inspection.  Since most of our developers are Android developers, the IDE was an added bonus due to its familiarity.
 - Flutter does not rely on any native UI components, so it's largely immune to breaking changes introduced by Apple, Google, or Android device manufacturers.
+- For the same reason, the number of Android vendor specific bugs decreases.  Flutter UI is completely vendor proof.  When using native components in the UI (like Android native or React), the underlying component can be modified by a particular hardware vendor to express different behaviors, thus creating vendor specific bugs.
 
 ### How much native code did we end up writing on both iOS and Android? 
 
@@ -96,7 +100,13 @@ All in all this was a pretty surprising result for us; we had initially expected
 
 ### Challenges?
 
-We really wanted to add a challenges section to this article to give it a little balance.  Unfortunately, no one on the mobile team could identify anything that was particularly challenging.  We'll keep an eye out for gnarly bugs moving forward and will write follow ups when we finally encounter a good challenge to document.
+The ecosystem of third party libraries for Flutter is relatively immature.  We had to fork a couple of plugins and sometimes roll our own libraries that we would not have had to do in native or React.
+
+_Some examples:_
+
+- The most widely used SQLite library is SQFLite, but it did not offer encryption.  We forked the branch and plugged in native encrypted SQLite binaries as dependencies while modifying calls from the SQFLite library to underlying native API calls so that they included the encryption password.
+- When we first developed our application, the webview libraries were subpar.  Webviews require the native webview to be rendered within a positioned frame that overlays the flutter renderer's view.  Additionally, the webview is itself a singleton, meaning only 1 webview can be utilized at any given time.  We forked the most stable webview plugin library, making minor changes to allow the functionality we needed; however, I can foresee a time where we might need to write our own library for interacting with native webviews.
+- Pubnub messaging library.  Pubnub didn't offer a flutter/dart library at the time we developed our application, so we wrote a pure Dart implementation of the library. Thankfully, Dart makes it incredibly simple to build libraries like this.  Since that time, Pubnub has published a flutter plugin which offers a dart interface to the native libraries; however, we're pretty happy with our pure Dart library, so we're sticking with it.
 
 ### In Review ...
 
