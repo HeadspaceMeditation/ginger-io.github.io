@@ -28,7 +28,7 @@ Over the last six months, the Ginger mobile team has been busy rewriting our nat
 
 We are too small to have dedicated native iOS and Android apps.  Maintaining redundancy across two mobile teams would have required us to maintain four to six developers rather than as few as two to three in a cross platform environment.
 
-The organizational complexity of maintaining iOS and Android teams created inefficiencies from engineering all the way up to marketing.  We hypothesized that having a single team and product would reduce the social complexity within our team, allowing us to move faster and have a more unified product experience.
+The organizational complexity of maintaining iOS and Android teams created inefficiencies from engineering all the way up to marketing.  We hypothesized that having a single team and product would reduce organizational complexity, allowing us to move faster and have a more unified product experience.
 
 Finally, Our legacy native apps had accumulated years of technical debt; we were ready for a full rewrite.
 
