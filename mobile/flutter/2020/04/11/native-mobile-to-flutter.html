@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,400,400italic,700,700italic,900,900italic%7COpen+Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic"
+      media="all"
+    />
+
+    <link rel="stylesheet" href="/assets/css/bulma.min.css" media="all" />
+    <link rel="stylesheet" href="/assets/css/main.css" media="all" />
+  </head>
+  <body>
+    <nav class="mainNav">
+      <div class="navContent">
+        <a href="/">
+          <img src="/assets/images/logo.svg" />
+        </a>
+
+        <ul class="menu">
+          <li><a href="/">Home</a></li>
+          <li><a href="/feed.xml">RSS</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container content">
+      <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Migrating from Native Mobile to Flutter.</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-04-11T00:00:00-07:00" itemprop="datePublished">Apr 11, 2020
+      </time>• <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">Bobby Manuel</span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Over the last six months, the Ginger mobile team has been busy rewriting our native iOS and Android mobile apps into a shiny new cross-platform Flutter App!  The app has been live in production since February and we are excited to share the incredible gains we have achieved.</p>
+
+<p><img src="/assets/images/ginger_home_screenshots.png" alt="Ginger screenshots" /></p>
+
+<h3 id="the-results-are-in">The results are in!</h3>
+
+<ul>
+  <li>2 - 3x improvement in development velocity after the switch.</li>
+  <li>98% shared code across both platforms.</li>
+  <li>Reduction from 140,000 lines of code to 31,000 lines of code.  This is despite launching with a brand new online/offline content system that did not exist in the native apps.</li>
+  <li>The application polish and user experience is on par with our native iOS application and easily superior to our native android application.</li>
+  <li>Most importantly, we experienced no Flutter related bugs or unpredictable behaviors after the launch.</li>
+</ul>
+
+<h3 id="how-long-did-this-take">How long did this take?</h3>
+
+<ul>
+  <li>Project spanned 5 months: Aug to Dec 2019</li>
+  <li>Beta release to Android users in February 2020.</li>
+  <li>Release to all users Android + iOS March 2020.</li>
+</ul>
+
+<h3 id="what-problems-were-we-hoping-to-solve">What problems were we hoping to solve?</h3>
+
+<p>We are too small to have dedicated native iOS and Android apps.  Maintaining redundancy across two mobile teams would have required us to maintain four to six developers rather than as few as two to three in a cross platform environment.</p>
+
+<p>The organizational complexity of maintaining iOS and Android teams created inefficiencies from engineering all the way up to marketing.  We hypothesized that having a single team and product would reduce organizational complexity, allowing us to move faster and have a more unified product experience.</p>
+
+<p>Finally, our legacy native apps had accumulated years of technical debt; we were ready for a full rewrite.</p>
+
+<p><em>Our key objectives were…</em></p>
+
+<ul>
+  <li>to have one product rather than two (feature parity).</li>
+  <li>to simplify product communication within the team and externally.</li>
+  <li>to unify the mobile team.</li>
+  <li>to reduce the cost and time of each feature we ship.</li>
+  <li>to improve the scalability and redundancy within our mobile team.</li>
+  <li>to increase the overall software quality of the product.</li>
+</ul>
+
+<p>This finally seemed possible as the cross-platform mobile space dramatically matured over the last two years: there were two great options to choose from, <em>Flutter</em> and <em>React Native</em>.</p>
+
+<h3 id="why-did-we-end-up-choosing-flutter">Why did we end up choosing Flutter?</h3>
+
+<p>The biggest challenge we faced was the timeline within which we had to complete the switch: just 5 short months.  Our native apps had 140,000 lines of code between the two platforms, so we needed to factor in both the learning curve and development speed.</p>
+
+<p><em>Regardless of our choice our entire team would have to…</em></p>
+
+<ol>
+  <li>learn a new programming language and UI framework</li>
+  <li>add sufficient test coverage to confidently launch the application</li>
+  <li>deliver a highly secure application.</li>
+</ol>
+
+<p>At the end of the day, the developers called it.  Flutter felt much more approachable and less like a web platform than React Native.</p>
+
+<h4 id="things-we-liked-about-react">Things we liked about React:</h4>
+
+<ul>
+  <li>Maturity and community size: React Native has been in production for much longer.</li>
+  <li>Testing utilities are definitely better on React.</li>
+  <li>More third party library support.</li>
+</ul>
+
+<h4 id="things-we-liked-about-flutter">Things we liked about Flutter:</h4>
+
+<ul>
+  <li>Without javascript developers on our mobile team, the learning curve for Dart/Flutter was substantially lower than Javascript/React Native.</li>
+  <li>Flutter offered clean, straight-forward conventions that were easy to learn, expressive and explicit.</li>
+  <li>Android Studio offered a turnkey development environment with performance monitoring tools, hot reload and step through debugging and inspection.  Since most of our developers are Android developers, the IDE was an added bonus due to its familiarity.</li>
+  <li>Flutter does not rely on any native UI components, so it’s largely immune to breaking changes introduced by Apple, Google, or Android device manufacturers.</li>
+  <li>For the same reason, the number of Android vendor specific bugs decreases.  Flutter UI is completely vendor proof.  When using native components in the UI (like Android native or React), the underlying component can be modified by a particular hardware vendor to express different behaviors, thus creating vendor specific bugs.</li>
+</ul>
+
+<h3 id="how-much-native-code-did-we-end-up-writing-on-both-ios-and-android">How much native code did we end up writing on both iOS and Android?</h3>
+
+<p>Flutter promises a very high percentage of shared cross-platform code across the platforms, but we still had to write some native code.</p>
+
+<p>Flutter offers a very simple message passing API for communicating with native code.  We needed to use native integrations for the following relatively small group of features:</p>
+
+<ul>
+  <li>Push notification.</li>
+  <li>Deep link handling.</li>
+  <li>Connectivity detection.</li>
+  <li>Security features.</li>
+  <li>Device information.</li>
+</ul>
+
+<p><em>This platform specific code amounted to less than 2% of our total lines of code.</em></p>
+
+<p>We were able to write this functionality easily and communicate between Flutter and native with very little interface overhead. Flutter provides a <a href="https://flutter.dev/docs/development/platform-integration/platform-channels#architecture">very simple api</a> for communicating bidirectionally between native and dart code.</p>
+
+<h3 id="how-was-the-learning-curve">How was the learning curve?</h3>
+
+<p>Dart/Flutter is definitely the easiest (of many) languages and UI frameworks I’ve ever learned.  Within two weeks most of our engineers were up to speed and highly productive.</p>
+
+<h3 id="how-secure-is-flutter-out-of-the-box">How secure is Flutter out of the box?</h3>
+
+<p>After completing our application, we hired an external security group to do an analysis on our application.  The analysis tests found no client side vulnerabilities.  The short answer is that <strong>Flutter is secure out of the box</strong>.</p>
+
+<p>We didn’t do that much to secure the app prior to the security test other than using an encrypted SQLite database and an excellent little plugin called <a href="https://pub.dev/packages/flutter_secure_storage">flutter_secure_storage</a> which allowed us to write keys to the iOS Keychain or to Android Keystore.  We made sure that no data was persisted on the device in any location other than these two locations.  Aside from that, we mostly let the flutter and dart libraries do their thing.</p>
+
+<p>All in all this was a pretty surprising result for us; we had initially expected to spend considerable time on a security deep dive after we were code complete.  So, imagine our surprise.</p>
+
+<h3 id="challenges">Challenges?</h3>
+
+<p>The ecosystem of third party libraries for Flutter is relatively immature.  We had to fork a couple of plugins and sometimes roll our own libraries that we would not have had to do in native or React.</p>
+
+<p><em>Some examples:</em></p>
+
+<ul>
+  <li>The most widely used SQLite library is SQFLite, but it did not offer encryption.  We forked the branch and plugged in native encrypted SQLite binaries as dependencies while modifying calls from the SQFLite library to underlying native API calls so that they included the encryption password.</li>
+  <li>When we first developed our application, the webview libraries were subpar.  Webviews require the native webview to be rendered within a positioned frame that overlays the flutter renderer’s view.  Additionally, the webview is itself a singleton, meaning only 1 webview can be utilized at any given time.  We forked the most stable webview plugin library, making minor changes to allow the functionality we needed; however, I can foresee a time where we might need to write our own library for interacting with native webviews.</li>
+  <li>Pubnub messaging library.  Pubnub didn’t offer a flutter/dart library at the time we developed our application, so we wrote a pure Dart implementation of the library. Thankfully, Dart makes it incredibly simple to build libraries like this.  Since that time, Pubnub has published a flutter plugin which offers a dart interface to the native libraries; however, we’re pretty happy with our pure Dart library, so we’re sticking with it.</li>
+</ul>
+
+<h3 id="in-review-">In Review …</h3>
+
+<p>The project’s success exceeded expectations.  In addition to hitting our timelines, we turned a lot of heads.  Our initially skeptical native mobile developers, myself included, became stalwart champions of the platform.</p>
+
+<ul>
+  <li>2 to 3x increase in development speed.</li>
+  <li>98% shared code across iOS and Android platforms.</li>
+  <li>No troubles with either Apple or Play store deployment.</li>
+  <li>Reduction from 140,000 lines of code to 31,000 lines of code.</li>
+  <li>The application looked as good or better than the native apps had.</li>
+</ul>
+
+<h3 id="questions-or-suggestions">Questions or suggestions?</h3>
+
+<p>Email us at <a href="mailto:engineering-blog@ginger.io">engineering-blog@ginger.io</a></p>
+
+  </div><a class="u-url" href="/mobile/flutter/2020/04/11/native-mobile-to-flutter.html" hidden></a>
+</article>
+
+    </div>
+  </body>
+</html>
