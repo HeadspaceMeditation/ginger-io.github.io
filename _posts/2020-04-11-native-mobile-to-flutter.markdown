@@ -30,7 +30,7 @@ We are too small to have dedicated native iOS and Android apps.  Maintaining red
 
 The organizational complexity of maintaining iOS and Android teams created inefficiencies from engineering all the way up to marketing.  We hypothesized that having a single team and product would reduce organizational complexity, allowing us to move faster and have a more unified product experience.
 
-Finally, Our legacy native apps had accumulated years of technical debt; we were ready for a full rewrite.
+Finally, our legacy native apps had accumulated years of technical debt; we were ready for a full rewrite.
 
 _Our key objectives were..._
 
@@ -106,7 +106,7 @@ _Some examples:_
 
 - The most widely used SQLite library is SQFLite, but it did not offer encryption.  We forked the branch and plugged in native encrypted SQLite binaries as dependencies while modifying calls from the SQFLite library to underlying native API calls so that they included the encryption password.
 - When we first developed our application, the webview libraries were subpar.  Webviews require the native webview to be rendered within a positioned frame that overlays the flutter renderer's view.  Additionally, the webview is itself a singleton, meaning only 1 webview can be utilized at any given time.  We forked the most stable webview plugin library, making minor changes to allow the functionality we needed; however, I can foresee a time where we might need to write our own library for interacting with native webviews.
-- Pubnub messaging library.  Pubnub didn't offer a flutter/dart library at the time we developed our application, so we wrote a pure Dart implementation of the library. Thankfully, Dart makes it incredibly simple to build libraries like this.  Since that time, pubnub has published a flutter plugin which offers a dart interface to the native libraries, but we're pretty happy with our pure DART library, so we're sticking with it.
+- Pubnub messaging library.  Pubnub didn't offer a flutter/dart library at the time we developed our application, so we wrote a pure Dart implementation of the library. Thankfully, Dart makes it incredibly simple to build libraries like this.  Since that time, Pubnub has published a flutter plugin which offers a dart interface to the native libraries; however, we're pretty happy with our pure Dart library, so we're sticking with it.
 
 ### In Review ...
 
