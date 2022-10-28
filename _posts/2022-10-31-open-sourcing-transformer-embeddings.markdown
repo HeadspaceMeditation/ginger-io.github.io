@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Open Sourcing Transformer Embeddings"
-date: 2022-10-31
+date: 2022-10-28
 categories: [nlp, data science, open source]
 author: Setu Shah
 ---
@@ -28,4 +28,4 @@ Today, we are [open-sourcing this package](https://github.com/ginger-io/transfor
 
 - Want to fine-tune the underlying embedding models or train new models. (We recommend [HF `transformers`](https://github.com/huggingface/transformers) or [`sentence-transformers`](https://github.com/UKPLab/sentence-transformers) as alternatives.)
 
-`transformer-embeddings` is a battle-tested package for getting embeddings from transformer models in 10+ of our internal production workflows, running on CPUs and GPUs, for real-time and batch inference. We hope you use it, like it and it makes it easier for you to use transformer models, as it has for us :).
+`transformer-embeddings` is a battle-tested package for generating embeddings from transformer models in 10+ of our internal production workflows, running on CPUs and GPUs, for real-time and batch inference. We hope you use it, like it and it makes it easier for you to use transformer models, as it has for us :).
