@@ -30,3 +30,7 @@ Today, we are [open-sourcing this package](https://github.com/ginger-io/transfor
 - Use TensorFlow / JAX for your deep learning models.
 
 `transformer-embeddings` is a battle-tested package for generating embeddings from transformer models in 10+ of our internal production workflows, running on CPUs and GPUs, for real-time and batch inference. We hope you use it, like it and it makes it easier for you to use transformer models, as it has for us :).
+
+## Questions or suggesstions?
+
+Email us at <a href="mailto:transformer-embeddings@headspace.com">transformer-embeddings@headspace.com</a>.
