@@ -8,7 +8,7 @@ author: Setu Shah
 
 The Data Science team at Headspace Health is a heavy user of building, training and productionizing transformer-based NLP models.
 
-Depending on the application, our NLP models operate at varying levels of atomicity: token, word, phrase, sentence, paragraph and document. A lot of our models rely on embeddings from off-the-shelf [transformers models](https://huggingface.co/models), while some are fine-tuned for the application we are building for. Similarly, as a part of our work, we often try out different models and during exploration, while comparing various pooling methods.
+Depending on the application, our NLP models operate at varying levels of atomicity: token, word, phrase, sentence, paragraph and document. A lot of our models rely on embeddings from off-the-shelf [Transformer-based models](https://huggingface.co/models), while some are fine-tuned for the application we are building for. Similarly, as a part of our work, we often try out different models during exploration, while comparing various pooling methods.
 
 About 18 months ago, we discovered the need for a streamlined way to use embeddings across our work for our exploration and production use cases. That is when we started building `transformer-embeddings`, an internal Python package that made it easy to interact with transformer-based models that are built using [PyTorch](https://pytorch.org/).
 
