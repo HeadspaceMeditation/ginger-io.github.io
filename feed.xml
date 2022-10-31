@@ -1,348 +1,379 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://ginger-io.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ginger-io.github.io/" rel="alternate" type="text/html" /><updated>2020-04-17T13:43:02-07:00</updated><id>https://ginger-io.github.io/feed.xml</id><title type="html">Ginger engineering blog</title><subtitle></subtitle><entry><title type="html">Migrating from Native Mobile to Flutter.</title><link href="https://ginger-io.github.io/mobile/flutter/2020/04/11/native-mobile-to-flutter.html" rel="alternate" type="text/html" title="Migrating from Native Mobile to Flutter." /><published>2020-04-11T00:00:00-07:00</published><updated>2020-04-11T00:00:00-07:00</updated><id>https://ginger-io.github.io/mobile/flutter/2020/04/11/native-mobile-to-flutter</id><content type="html" xml:base="https://ginger-io.github.io/mobile/flutter/2020/04/11/native-mobile-to-flutter.html">&lt;p&gt;Over the last six months, the Ginger mobile team has been busy rewriting our native iOS and Android mobile apps into a shiny new cross-platform Flutter App!  The app has been live in production since February and we are excited to share the incredible gains we have achieved.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://ginger-io.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ginger-io.github.io/" rel="alternate" type="text/html" /><updated>2022-10-31T13:48:23-07:00</updated><id>https://ginger-io.github.io/feed.xml</id><title type="html">Ginger engineering blog</title><subtitle></subtitle><entry><title type="html">Open Sourcing Transformer Embeddings</title><link href="https://ginger-io.github.io/nlp/data%20science/open%20source/2022/10/28/open-sourcing-transformer-embeddings.html" rel="alternate" type="text/html" title="Open Sourcing Transformer Embeddings" /><published>2022-10-28T00:00:00-07:00</published><updated>2022-10-28T00:00:00-07:00</updated><id>https://ginger-io.github.io/nlp/data%20science/open%20source/2022/10/28/open-sourcing-transformer-embeddings</id><content type="html" xml:base="https://ginger-io.github.io/nlp/data%20science/open%20source/2022/10/28/open-sourcing-transformer-embeddings.html"><![CDATA[<p>The Data Science team at Headspace Health is a heavy user of building, training and productionizing transformer-based NLP models.</p>
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/ginger_home_screenshots.png&quot; alt=&quot;Ginger screenshots&quot; /&gt;&lt;/p&gt;
+<p>Depending on the application, our NLP models operate at varying levels of atomicity: token, word, phrase, sentence, paragraph and document. A lot of our models rely on embeddings from off-the-shelf <a href="https://huggingface.co/models">Transformer-based models</a>, while some are fine-tuned for the application we are building for. Similarly, as a part of our work, we often try out different models during exploration, while comparing various pooling methods.</p>
 
-&lt;h3 id=&quot;the-results-are-in&quot;&gt;The results are in!&lt;/h3&gt;
+<p>About 18 months ago, we discovered the need for a streamlined way to use embeddings across our work for our exploration and production use cases. That is when we started building <code class="language-plaintext highlighter-rouge">transformer-embeddings</code>, an internal Python package that made it easy to interact with transformer-based models that are built using <a href="https://pytorch.org/">PyTorch</a>.</p>
 
-&lt;ul&gt;
-  &lt;li&gt;2 - 3x improvement in development velocity after the switch.&lt;/li&gt;
-  &lt;li&gt;98% shared code across both platforms.&lt;/li&gt;
-  &lt;li&gt;Reduction from 140,000 lines of code to 31,000 lines of code.  This is despite launching with a brand new online/offline content system that did not exist in the native apps.&lt;/li&gt;
-  &lt;li&gt;The application polish and user experience is on par with our native iOS application and easily superior to our native android application.&lt;/li&gt;
-  &lt;li&gt;Most importantly, we experienced no Flutter related bugs or unpredictable behaviors after the launch.&lt;/li&gt;
-&lt;/ul&gt;
+<p>Today, we are <a href="https://github.com/ginger-io/transformer-embeddings/">open-sourcing this package</a> and <a href="https://pypi.org/project/transformer-embeddings/">publishing it to PyPI</a> to make it easy for anyone in the transformer and NLP communities to be able to use aggregated and pooled embeddings for phrases, sentences and paragraphs and documents, at varying levels of aggregation, in any of their applications.</p>
 
-&lt;h3 id=&quot;how-long-did-this-take&quot;&gt;How long did this take?&lt;/h3&gt;
+<h3 id="you-should-use-this-if-you-want-to">You should use this if you want to…</h3>
 
-&lt;ul&gt;
-  &lt;li&gt;Project spanned 5 months: Aug to Dec 2019&lt;/li&gt;
-  &lt;li&gt;Beta release to Android users in February 2020.&lt;/li&gt;
-  &lt;li&gt;Release to all users Android + iOS March 2020.&lt;/li&gt;
-&lt;/ul&gt;
+<ul>
+  <li>Automatically apply tokenization (with the model defaults) before your model’s forward pass.</li>
+  <li>Stack outputs from the model into a single, iterable array that map 1:1 with your input.</li>
+  <li>Simplify interactions with any transformer model available on the <a href="https://huggingface.co/models">HuggingFace Model Hub</a> for exploration and inference.</li>
+  <li>Easily apply and compare the impact of different pooling strategies (mean, max, min, pooler) on your downstream tasks.</li>
+  <li>Use your model on CPUs or GPUs, without worrying about if you asked PyTorch to use the right device.</li>
+  <li>Export the model and additional artifacts (custom scikit-learn / tree-based models, model cards, etc.) to S3.</li>
+  <li>Customize batch sizes for different models as you play with them.</li>
+</ul>
 
-&lt;h3 id=&quot;what-problems-were-we-hoping-to-solve&quot;&gt;What problems were we hoping to solve?&lt;/h3&gt;
+<h2 id="you-should-not-use-this-if-you-want-to">You should <em>not</em> use this if you want to…</h2>
 
-&lt;p&gt;We are too small to have dedicated native iOS and Android apps.  Maintaining redundancy across two mobile teams would have required us to maintain four to six developers rather than as few as two to three in a cross platform environment.&lt;/p&gt;
+<ul>
+  <li>Fine-tune the underlying embedding models or train new models. (We recommend <a href="https://github.com/huggingface/transformers">HF <code class="language-plaintext highlighter-rouge">transformers</code></a> or <a href="https://github.com/UKPLab/sentence-transformers"><code class="language-plaintext highlighter-rouge">sentence-transformers</code></a> as alternatives.)</li>
+  <li>Use TensorFlow / JAX for your deep learning models.</li>
+</ul>
 
-&lt;p&gt;The organizational complexity of maintaining iOS and Android teams created inefficiencies from engineering all the way up to marketing.  We hypothesized that having a single team and product would reduce organizational complexity, allowing us to move faster and have a more unified product experience.&lt;/p&gt;
+<p><code class="language-plaintext highlighter-rouge">transformer-embeddings</code> is a battle-tested package for generating embeddings from transformer models in 10+ of our internal production workflows, running on CPUs or GPUs, for real-time and batch inference. We hope you use it, like it and it makes it easier for you to use transformer models, as it has for us :).</p>
 
-&lt;p&gt;Finally, our legacy native apps had accumulated years of technical debt; we were ready for a full rewrite.&lt;/p&gt;
+<h2 id="questions-or-suggestions">Questions or suggestions?</h2>
 
-&lt;p&gt;&lt;em&gt;Our key objectives were…&lt;/em&gt;&lt;/p&gt;
+<p>Email us at <a href="mailto:transformer-embeddings@headspace.com">transformer-embeddings@headspace.com</a>.</p>]]></content><author><name>Setu Shah</name></author><category term="nlp" /><category term="data science" /><category term="open source" /><summary type="html"><![CDATA[The Data Science team at Headspace Health is a heavy user of building, training and productionizing transformer-based NLP models.]]></summary></entry><entry><title type="html">Migrating from Native Mobile to Flutter.</title><link href="https://ginger-io.github.io/mobile/flutter/2020/04/11/native-mobile-to-flutter.html" rel="alternate" type="text/html" title="Migrating from Native Mobile to Flutter." /><published>2020-04-11T00:00:00-07:00</published><updated>2020-04-11T00:00:00-07:00</updated><id>https://ginger-io.github.io/mobile/flutter/2020/04/11/native-mobile-to-flutter</id><content type="html" xml:base="https://ginger-io.github.io/mobile/flutter/2020/04/11/native-mobile-to-flutter.html"><![CDATA[<p>Over the last six months, the Ginger mobile team has been busy rewriting our native iOS and Android mobile apps into a shiny new cross-platform Flutter App!  The app has been live in production since February and we are excited to share the incredible gains we have achieved.</p>
 
-&lt;ul&gt;
-  &lt;li&gt;to have one product rather than two (feature parity).&lt;/li&gt;
-  &lt;li&gt;to simplify product communication within the team and externally.&lt;/li&gt;
-  &lt;li&gt;to unify the mobile team.&lt;/li&gt;
-  &lt;li&gt;to reduce the cost and time of each feature we ship.&lt;/li&gt;
-  &lt;li&gt;to improve the scalability and redundancy within our mobile team.&lt;/li&gt;
-  &lt;li&gt;to increase the overall software quality of the product.&lt;/li&gt;
-&lt;/ul&gt;
+<p><img src="/assets/images/ginger_home_screenshots.png" alt="Ginger screenshots" /></p>
 
-&lt;p&gt;This finally seemed possible as the cross-platform mobile space dramatically matured over the last two years: there were two great options to choose from, &lt;em&gt;Flutter&lt;/em&gt; and &lt;em&gt;React Native&lt;/em&gt;.&lt;/p&gt;
+<h3 id="the-results-are-in">The results are in!</h3>
 
-&lt;h3 id=&quot;why-did-we-end-up-choosing-flutter&quot;&gt;Why did we end up choosing Flutter?&lt;/h3&gt;
+<ul>
+  <li>2 - 3x improvement in development velocity after the switch.</li>
+  <li>98% shared code across both platforms.</li>
+  <li>Reduction from 140,000 lines of code to 31,000 lines of code.  This is despite launching with a brand new online/offline content system that did not exist in the native apps.</li>
+  <li>The application polish and user experience is on par with our native iOS application and easily superior to our native android application.</li>
+  <li>Most importantly, we experienced no Flutter related bugs or unpredictable behaviors after the launch.</li>
+</ul>
 
-&lt;p&gt;The biggest challenge we faced was the timeline within which we had to complete the switch: just 5 short months.  Our native apps had 140,000 lines of code between the two platforms, so we needed to factor in both the learning curve and development speed.&lt;/p&gt;
+<h3 id="how-long-did-this-take">How long did this take?</h3>
 
-&lt;p&gt;&lt;em&gt;Regardless of our choice our entire team would have to…&lt;/em&gt;&lt;/p&gt;
+<ul>
+  <li>Project spanned 5 months: Aug to Dec 2019</li>
+  <li>Beta release to Android users in February 2020.</li>
+  <li>Release to all users Android + iOS March 2020.</li>
+</ul>
 
-&lt;ol&gt;
-  &lt;li&gt;learn a new programming language and UI framework&lt;/li&gt;
-  &lt;li&gt;add sufficient test coverage to confidently launch the application&lt;/li&gt;
-  &lt;li&gt;deliver a highly secure application.&lt;/li&gt;
-&lt;/ol&gt;
+<h3 id="what-problems-were-we-hoping-to-solve">What problems were we hoping to solve?</h3>
 
-&lt;p&gt;At the end of the day, the developers called it.  Flutter felt much more approachable and less like a web platform than React Native.&lt;/p&gt;
+<p>We are too small to have dedicated native iOS and Android apps.  Maintaining redundancy across two mobile teams would have required us to maintain four to six developers rather than as few as two to three in a cross platform environment.</p>
 
-&lt;h4 id=&quot;things-we-liked-about-react&quot;&gt;Things we liked about React:&lt;/h4&gt;
+<p>The organizational complexity of maintaining iOS and Android teams created inefficiencies from engineering all the way up to marketing.  We hypothesized that having a single team and product would reduce organizational complexity, allowing us to move faster and have a more unified product experience.</p>
 
-&lt;ul&gt;
-  &lt;li&gt;Maturity and community size: React Native has been in production for much longer.&lt;/li&gt;
-  &lt;li&gt;Testing utilities are definitely better on React.&lt;/li&gt;
-  &lt;li&gt;More third party library support.&lt;/li&gt;
-&lt;/ul&gt;
+<p>Finally, our legacy native apps had accumulated years of technical debt; we were ready for a full rewrite.</p>
 
-&lt;h4 id=&quot;things-we-liked-about-flutter&quot;&gt;Things we liked about Flutter:&lt;/h4&gt;
+<p><em>Our key objectives were…</em></p>
 
-&lt;ul&gt;
-  &lt;li&gt;Without javascript developers on our mobile team, the learning curve for Dart/Flutter was substantially lower than Javascript/React Native.&lt;/li&gt;
-  &lt;li&gt;Flutter offered clean, straight-forward conventions that were easy to learn, expressive and explicit.&lt;/li&gt;
-  &lt;li&gt;Android Studio offered a turnkey development environment with performance monitoring tools, hot reload and step through debugging and inspection.  Since most of our developers are Android developers, the IDE was an added bonus due to its familiarity.&lt;/li&gt;
-  &lt;li&gt;Flutter does not rely on any native UI components, so it’s largely immune to breaking changes introduced by Apple, Google, or Android device manufacturers.&lt;/li&gt;
-  &lt;li&gt;For the same reason, the number of Android vendor specific bugs decreases.  Flutter UI is completely vendor proof.  When using native components in the UI (like Android native or React), the underlying component can be modified by a particular hardware vendor to express different behaviors, thus creating vendor specific bugs.&lt;/li&gt;
-&lt;/ul&gt;
+<ul>
+  <li>to have one product rather than two (feature parity).</li>
+  <li>to simplify product communication within the team and externally.</li>
+  <li>to unify the mobile team.</li>
+  <li>to reduce the cost and time of each feature we ship.</li>
+  <li>to improve the scalability and redundancy within our mobile team.</li>
+  <li>to increase the overall software quality of the product.</li>
+</ul>
 
-&lt;h3 id=&quot;how-much-native-code-did-we-end-up-writing-on-both-ios-and-android&quot;&gt;How much native code did we end up writing on both iOS and Android?&lt;/h3&gt;
+<p>This finally seemed possible as the cross-platform mobile space dramatically matured over the last two years: there were two great options to choose from, <em>Flutter</em> and <em>React Native</em>.</p>
 
-&lt;p&gt;Flutter promises a very high percentage of shared cross-platform code across the platforms, but we still had to write some native code.&lt;/p&gt;
+<h3 id="why-did-we-end-up-choosing-flutter">Why did we end up choosing Flutter?</h3>
 
-&lt;p&gt;Flutter offers a very simple message passing API for communicating with native code.  We needed to use native integrations for the following relatively small group of features:&lt;/p&gt;
+<p>The biggest challenge we faced was the timeline within which we had to complete the switch: just 5 short months.  Our native apps had 140,000 lines of code between the two platforms, so we needed to factor in both the learning curve and development speed.</p>
 
-&lt;ul&gt;
-  &lt;li&gt;Push notification.&lt;/li&gt;
-  &lt;li&gt;Deep link handling.&lt;/li&gt;
-  &lt;li&gt;Connectivity detection.&lt;/li&gt;
-  &lt;li&gt;Security features.&lt;/li&gt;
-  &lt;li&gt;Device information.&lt;/li&gt;
-&lt;/ul&gt;
+<p><em>Regardless of our choice our entire team would have to…</em></p>
 
-&lt;p&gt;&lt;em&gt;This platform specific code amounted to less than 2% of our total lines of code.&lt;/em&gt;&lt;/p&gt;
+<ol>
+  <li>learn a new programming language and UI framework</li>
+  <li>add sufficient test coverage to confidently launch the application</li>
+  <li>deliver a highly secure application.</li>
+</ol>
 
-&lt;p&gt;We were able to write this functionality easily and communicate between Flutter and native with very little interface overhead. Flutter provides a &lt;a href=&quot;https://flutter.dev/docs/development/platform-integration/platform-channels#architecture&quot;&gt;very simple api&lt;/a&gt; for communicating bidirectionally between native and dart code.&lt;/p&gt;
+<p>At the end of the day, the developers called it.  Flutter felt much more approachable and less like a web platform than React Native.</p>
 
-&lt;h3 id=&quot;how-was-the-learning-curve&quot;&gt;How was the learning curve?&lt;/h3&gt;
+<h4 id="things-we-liked-about-react">Things we liked about React:</h4>
 
-&lt;p&gt;Dart/Flutter is definitely the easiest (of many) languages and UI frameworks I’ve ever learned.  Within two weeks most of our engineers were up to speed and highly productive.&lt;/p&gt;
+<ul>
+  <li>Maturity and community size: React Native has been in production for much longer.</li>
+  <li>Testing utilities are definitely better on React.</li>
+  <li>More third party library support.</li>
+</ul>
 
-&lt;h3 id=&quot;how-secure-is-flutter-out-of-the-box&quot;&gt;How secure is Flutter out of the box?&lt;/h3&gt;
+<h4 id="things-we-liked-about-flutter">Things we liked about Flutter:</h4>
 
-&lt;p&gt;After completing our application, we hired an external security group to do an analysis on our application.  The analysis tests found no client side vulnerabilities.  The short answer is that &lt;strong&gt;Flutter is secure out of the box&lt;/strong&gt;.&lt;/p&gt;
+<ul>
+  <li>Without javascript developers on our mobile team, the learning curve for Dart/Flutter was substantially lower than Javascript/React Native.</li>
+  <li>Flutter offered clean, straight-forward conventions that were easy to learn, expressive and explicit.</li>
+  <li>Android Studio offered a turnkey development environment with performance monitoring tools, hot reload and step through debugging and inspection.  Since most of our developers are Android developers, the IDE was an added bonus due to its familiarity.</li>
+  <li>Flutter does not rely on any native UI components, so it’s largely immune to breaking changes introduced by Apple, Google, or Android device manufacturers.</li>
+  <li>For the same reason, the number of Android vendor specific bugs decreases.  Flutter UI is completely vendor proof.  When using native components in the UI (like Android native or React), the underlying component can be modified by a particular hardware vendor to express different behaviors, thus creating vendor specific bugs.</li>
+</ul>
 
-&lt;p&gt;We didn’t do that much to secure the app prior to the security test other than using an encrypted SQLite database and an excellent little plugin called &lt;a href=&quot;https://pub.dev/packages/flutter_secure_storage&quot;&gt;flutter_secure_storage&lt;/a&gt; which allowed us to write keys to the iOS Keychain or to Android Keystore.  We made sure that no data was persisted on the device in any location other than these two locations.  Aside from that, we mostly let the flutter and dart libraries do their thing.&lt;/p&gt;
+<h3 id="how-much-native-code-did-we-end-up-writing-on-both-ios-and-android">How much native code did we end up writing on both iOS and Android?</h3>
 
-&lt;p&gt;All in all this was a pretty surprising result for us; we had initially expected to spend considerable time on a security deep dive after we were code complete.  So, imagine our surprise.&lt;/p&gt;
+<p>Flutter promises a very high percentage of shared cross-platform code across the platforms, but we still had to write some native code.</p>
 
-&lt;h3 id=&quot;challenges&quot;&gt;Challenges?&lt;/h3&gt;
+<p>Flutter offers a very simple message passing API for communicating with native code.  We needed to use native integrations for the following relatively small group of features:</p>
 
-&lt;p&gt;The ecosystem of third party libraries for Flutter is relatively immature.  We had to fork a couple of plugins and sometimes roll our own libraries that we would not have had to do in native or React.&lt;/p&gt;
+<ul>
+  <li>Push notification.</li>
+  <li>Deep link handling.</li>
+  <li>Connectivity detection.</li>
+  <li>Security features.</li>
+  <li>Device information.</li>
+</ul>
 
-&lt;p&gt;&lt;em&gt;Some examples:&lt;/em&gt;&lt;/p&gt;
+<p><em>This platform specific code amounted to less than 2% of our total lines of code.</em></p>
 
-&lt;ul&gt;
-  &lt;li&gt;The most widely used SQLite library is SQFLite, but it did not offer encryption.  We forked the branch and plugged in native encrypted SQLite binaries as dependencies while modifying calls from the SQFLite library to underlying native API calls so that they included the encryption password.&lt;/li&gt;
-  &lt;li&gt;When we first developed our application, the webview libraries were subpar.  Webviews require the native webview to be rendered within a positioned frame that overlays the flutter renderer’s view.  Additionally, the webview is itself a singleton, meaning only 1 webview can be utilized at any given time.  We forked the most stable webview plugin library, making minor changes to allow the functionality we needed; however, I can foresee a time where we might need to write our own library for interacting with native webviews.&lt;/li&gt;
-  &lt;li&gt;Pubnub messaging library.  Pubnub didn’t offer a flutter/dart library at the time we developed our application, so we wrote a pure Dart implementation of the library. Thankfully, Dart makes it incredibly simple to build libraries like this.  Since that time, Pubnub has published a flutter plugin which offers a dart interface to the native libraries; however, we’re pretty happy with our pure Dart library, so we’re sticking with it.&lt;/li&gt;
-&lt;/ul&gt;
+<p>We were able to write this functionality easily and communicate between Flutter and native with very little interface overhead. Flutter provides a <a href="https://flutter.dev/docs/development/platform-integration/platform-channels#architecture">very simple api</a> for communicating bidirectionally between native and dart code.</p>
 
-&lt;h3 id=&quot;in-review-&quot;&gt;In Review …&lt;/h3&gt;
+<h3 id="how-was-the-learning-curve">How was the learning curve?</h3>
 
-&lt;p&gt;The project’s success exceeded expectations.  In addition to hitting our timelines, we turned a lot of heads.  Our initially skeptical native mobile developers, myself included, became stalwart champions of the platform.&lt;/p&gt;
+<p>Dart/Flutter is definitely the easiest (of many) languages and UI frameworks I’ve ever learned.  Within two weeks most of our engineers were up to speed and highly productive.</p>
 
-&lt;ul&gt;
-  &lt;li&gt;2 to 3x increase in development speed.&lt;/li&gt;
-  &lt;li&gt;98% shared code across iOS and Android platforms.&lt;/li&gt;
-  &lt;li&gt;No troubles with either Apple or Play store deployment.&lt;/li&gt;
-  &lt;li&gt;Reduction from 140,000 lines of code to 31,000 lines of code.&lt;/li&gt;
-  &lt;li&gt;The application looked as good or better than the native apps had.&lt;/li&gt;
-&lt;/ul&gt;
+<h3 id="how-secure-is-flutter-out-of-the-box">How secure is Flutter out of the box?</h3>
 
-&lt;h3 id=&quot;questions-or-suggestions&quot;&gt;Questions or suggestions?&lt;/h3&gt;
+<p>After completing our application, we hired an external security group to do an analysis on our application.  The analysis tests found no client side vulnerabilities.  The short answer is that <strong>Flutter is secure out of the box</strong>.</p>
 
-&lt;p&gt;Email us at &lt;a href=&quot;mailto:engineering-blog@ginger.io&quot;&gt;engineering-blog@ginger.io&lt;/a&gt;&lt;/p&gt;</content><author><name>Bobby Manuel</name></author><summary type="html">Over the last six months, the Ginger mobile team has been busy rewriting our native iOS and Android mobile apps into a shiny new cross-platform Flutter App! The app has been live in production since February and we are excited to share the incredible gains we have achieved.</summary></entry><entry><title type="html">Introducing Jay-Z</title><link href="https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z.html" rel="alternate" type="text/html" title="Introducing Jay-Z" /><published>2020-04-09T00:00:00-07:00</published><updated>2020-04-09T00:00:00-07:00</updated><id>https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z</id><content type="html" xml:base="https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z.html">&lt;h2 id=&quot;gingers-typescript-library-for-application-layer-encryption&quot;&gt;Ginger’s TypeScript library for application-layer encryption&lt;/h2&gt;
+<p>We didn’t do that much to secure the app prior to the security test other than using an encrypted SQLite database and an excellent little plugin called <a href="https://pub.dev/packages/flutter_secure_storage">flutter_secure_storage</a> which allowed us to write keys to the iOS Keychain or to Android Keystore.  We made sure that no data was persisted on the device in any location other than these two locations.  Aside from that, we mostly let the flutter and dart libraries do their thing.</p>
 
-&lt;p&gt;Mass data leaks are a &lt;a href=&quot;https://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/&quot;&gt;huge problem&lt;/a&gt;.&lt;/p&gt;
+<p>All in all this was a pretty surprising result for us; we had initially expected to spend considerable time on a security deep dive after we were code complete.  So, imagine our surprise.</p>
 
-&lt;p&gt;As engineers, we have a moral obligation to protect our users’ data in a way that minimizes the risk of it being exposed in a mass data leak. And our responsibility scales with the sensitivity of the data we collect. Ginger is a mental healthcare provider that stores, among other things, psychiatric diagnoseses - so we care deeply about protecting our members’ data.&lt;/p&gt;
+<h3 id="challenges">Challenges?</h3>
 
-&lt;p&gt;Strong encryption of data at rest is one of the best ways protect against a mass data leak. But many encryption libraries are infamously difficult to use. And that’s why we’re excited to give you a sneak preview of &lt;strong&gt;&lt;a href=&quot;https://github.com/ginger-io/jay-z&quot;&gt;Jay-Z&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+<p>The ecosystem of third party libraries for Flutter is relatively immature.  We had to fork a couple of plugins and sometimes roll our own libraries that we would not have had to do in native or React.</p>
 
-&lt;p&gt;Jay-Z is our open-source TypeScript library that makes application-layer encryption super easy. It’s built with &lt;a href=&quot;https://libsodium.gitbook.io/doc/&quot;&gt;libsodium&lt;/a&gt; and supports &lt;a href=&quot;https://aws.amazon.com/kms/&quot;&gt;AWS KMS&lt;/a&gt; out of the box. It’s primarily intended for use with “noSQL” data stores, like &lt;a href=&quot;https://aws.amazon.com/dynamodb/&quot;&gt;DynamoDB&lt;/a&gt;, but it can be used for other purposes as well (e.g. storing data in S3).&lt;/p&gt;
+<p><em>Some examples:</em></p>
 
-&lt;blockquote&gt;
-  &lt;p&gt;With Jay-Z you’ve got 99 security problems. But application-layer encryption ain’t one :-)!&lt;/p&gt;
-&lt;/blockquote&gt;
+<ul>
+  <li>The most widely used SQLite library is SQFLite, but it did not offer encryption.  We forked the branch and plugged in native encrypted SQLite binaries as dependencies while modifying calls from the SQFLite library to underlying native API calls so that they included the encryption password.</li>
+  <li>When we first developed our application, the webview libraries were subpar.  Webviews require the native webview to be rendered within a positioned frame that overlays the flutter renderer’s view.  Additionally, the webview is itself a singleton, meaning only 1 webview can be utilized at any given time.  We forked the most stable webview plugin library, making minor changes to allow the functionality we needed; however, I can foresee a time where we might need to write our own library for interacting with native webviews.</li>
+  <li>Pubnub messaging library.  Pubnub didn’t offer a flutter/dart library at the time we developed our application, so we wrote a pure Dart implementation of the library. Thankfully, Dart makes it incredibly simple to build libraries like this.  Since that time, Pubnub has published a flutter plugin which offers a dart interface to the native libraries; however, we’re pretty happy with our pure Dart library, so we’re sticking with it.</li>
+</ul>
 
-&lt;h2 id=&quot;whats-application-level-encryption-why-is-it-important&quot;&gt;What’s application-level encryption? Why is it important?&lt;/h2&gt;
+<h3 id="in-review-">In Review …</h3>
 
-&lt;p&gt;AWS offers an encryption-at-rest feature for DynamoDB, RDS and S3. This is good. Please turn it on!&lt;/p&gt;
+<p>The project’s success exceeded expectations.  In addition to hitting our timelines, we turned a lot of heads.  Our initially skeptical native mobile developers, myself included, became stalwart champions of the platform.</p>
 
-&lt;p&gt;But it’s not sufficient protection for your more sensitive data.&lt;/p&gt;
+<ul>
+  <li>2 to 3x increase in development speed.</li>
+  <li>98% shared code across iOS and Android platforms.</li>
+  <li>No troubles with either Apple or Play store deployment.</li>
+  <li>Reduction from 140,000 lines of code to 31,000 lines of code.</li>
+  <li>The application looked as good or better than the native apps had.</li>
+</ul>
 
-&lt;p&gt;The problem is that these features encrypt data &lt;em&gt;after&lt;/em&gt; it arrives at the AWS service and decrypt it &lt;em&gt;before&lt;/em&gt; sending an API response. This results in anybody with AWS console (or API) access to that service being able to view all your data in plaintext.&lt;/p&gt;
+<h3 id="questions-or-suggestions">Questions or suggestions?</h3>
 
-&lt;p&gt;Of course, you can lock down these permissions via IAM. But somebody is almost certainly going to wind up with &lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt; permissions that were only supposed to be “temporary” - e.g. somebody had to fix a bug in production and forgot to release their creds.&lt;/p&gt;
+<p>Email us at <a href="mailto:engineering-blog@ginger.io">engineering-blog@ginger.io</a></p>]]></content><author><name>Bobby Manuel</name></author><category term="mobile" /><category term="flutter" /><summary type="html"><![CDATA[Over the last six months, the Ginger mobile team has been busy rewriting our native iOS and Android mobile apps into a shiny new cross-platform Flutter App! The app has been live in production since February and we are excited to share the incredible gains we have achieved.]]></summary></entry><entry><title type="html">Introducing Jay-Z</title><link href="https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z.html" rel="alternate" type="text/html" title="Introducing Jay-Z" /><published>2020-04-09T00:00:00-07:00</published><updated>2020-04-09T00:00:00-07:00</updated><id>https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z</id><content type="html" xml:base="https://ginger-io.github.io/security/aws/2020/04/09/introducing-jay-z.html"><![CDATA[<h2 id="gingers-typescript-library-for-application-layer-encryption">Ginger’s TypeScript library for application-layer encryption</h2>
 
-&lt;p&gt;It’s much safer to encrypt and decrypt data at the application layer, using keys the storage layer doesn’t have access to. This ensures that you need both IAM permission to the service and access to the encryption key(s).&lt;/p&gt;
+<p>Mass data leaks are a <a href="https://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/">huge problem</a>.</p>
 
-&lt;p&gt;This is what Jay-Z does.&lt;/p&gt;
+<p>As engineers, we have a moral obligation to protect our users’ data in a way that minimizes the risk of it being exposed in a mass data leak. And our responsibility scales with the sensitivity of the data we collect. Ginger is a mental healthcare provider that stores, among other things, psychiatric diagnoseses - so we care deeply about protecting our members’ data.</p>
 
-&lt;h2 id=&quot;how-does-jay-z-work&quot;&gt;How does Jay-Z work?&lt;/h2&gt;
+<p>Strong encryption of data at rest is one of the best ways protect against a mass data leak. But many encryption libraries are infamously difficult to use. And that’s why we’re excited to give you a sneak preview of <strong><a href="https://github.com/ginger-io/jay-z">Jay-Z</a></strong>.</p>
 
-&lt;p&gt;Jay-Z encrypts and decrypts JSON objects. And its API is quite simple just &lt;code class=&quot;highlighter-rouge&quot;&gt;encryptItem&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;decryptItem&lt;/code&gt;.&lt;/p&gt;
+<p>Jay-Z is our open-source TypeScript library that makes application-layer encryption super easy. It’s built with <a href="https://libsodium.gitbook.io/doc/">libsodium</a> and supports <a href="https://aws.amazon.com/kms/">AWS KMS</a> out of the box. It’s primarily intended for use with “noSQL” data stores, like <a href="https://aws.amazon.com/dynamodb/">DynamoDB</a>, but it can be used for other purposes as well (e.g. storing data in S3).</p>
 
-&lt;h3 id=&quot;encryptitem&quot;&gt;EncryptItem&lt;/h3&gt;
+<blockquote>
+  <p>With Jay-Z you’ve got 99 security problems. But application-layer encryption ain’t one :-)!</p>
+</blockquote>
 
-&lt;p&gt;When you call &lt;code class=&quot;highlighter-rouge&quot;&gt;encryptItem&lt;/code&gt;, you specify a set of fields to encrypt and the others are left as plaintext (e.g. if persisting to DynamoDB, you don’t want to encrypt your object’s primary key, sort key or indexed attributes).&lt;/p&gt;
+<h2 id="whats-application-level-encryption-why-is-it-important">What’s application-level encryption? Why is it important?</h2>
 
-&lt;p&gt;By default, Jay-Z encrypts the specified fields of your JSON object with a unique data key. This key is generated by a configured &lt;code class=&quot;highlighter-rouge&quot;&gt;DataKeyProvider&lt;/code&gt; class. AWS KMS is intended to be the “default” key provider (Jay-Z ships with a &lt;code class=&quot;highlighter-rouge&quot;&gt;KMSDataKeyProvider&lt;/code&gt;), but you can roll your own too.&lt;/p&gt;
+<p>AWS offers an encryption-at-rest feature for DynamoDB, RDS and S3. This is good. Please turn it on!</p>
 
-&lt;p&gt;When a &lt;code class=&quot;highlighter-rouge&quot;&gt;DataKeyProvider&lt;/code&gt; generates a data key, it returns two versions of that key - one encrypted (e.g. using a KMS Master Key), and one plaintext.&lt;/p&gt;
+<p>But it’s not sufficient protection for your more sensitive data.</p>
 
-&lt;p&gt;The plaintext key is used to encrypt each specified field of your JSON item using libsodium’s &lt;a href=&quot;https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox&quot;&gt;secretbox&lt;/a&gt;. And the encrypted data key, nonce and other metadata required for decryption are appended to your JSON item in a &lt;code class=&quot;highlighter-rouge&quot;&gt;__jayz__metadata&lt;/code&gt; field.&lt;/p&gt;
+<p>The problem is that these features encrypt data <em>after</em> it arrives at the AWS service and decrypt it <em>before</em> sending an API response. This results in anybody with AWS console (or API) access to that service being able to view all your data in plaintext.</p>
 
-&lt;h3 id=&quot;decryptitem&quot;&gt;DecryptItem&lt;/h3&gt;
+<p>Of course, you can lock down these permissions via IAM. But somebody is almost certainly going to wind up with <code class="language-plaintext highlighter-rouge">*</code> permissions that were only supposed to be “temporary” - e.g. somebody had to fix a bug in production and forgot to release their creds.</p>
 
-&lt;p&gt;When you call decryptItem Jay-Z looks for a &lt;code class=&quot;highlighter-rouge&quot;&gt;__jayz__metadata&lt;/code&gt; field on your item, asks the &lt;code class=&quot;highlighter-rouge&quot;&gt;DataKeyProvider&lt;/code&gt; to decrypt the data key. And then uses the (now) plaintext data key to decrypt each field in your JSON item.&lt;/p&gt;
+<p>It’s much safer to encrypt and decrypt data at the application layer, using keys the storage layer doesn’t have access to. This ensures that you need both IAM permission to the service and access to the encryption key(s).</p>
 
-&lt;h3 id=&quot;diagram&quot;&gt;Diagram&lt;/h3&gt;
+<p>This is what Jay-Z does.</p>
 
-&lt;p&gt;Let’s look at a diagram of this flow (&lt;a href=&quot;https://github.com/ginger-io/jay-z/raw/master/diagram.svg?sanitize=true&quot;&gt;full size&lt;/a&gt;):&lt;/p&gt;
+<h2 id="how-does-jay-z-work">How does Jay-Z work?</h2>
 
-&lt;p&gt;&lt;img src=&quot;https://github.com/ginger-io/jay-z/raw/master/diagram.svg?sanitize=true&quot; /&gt;&lt;/p&gt;
+<p>Jay-Z encrypts and decrypts JSON objects. And its API is quite simple just <code class="language-plaintext highlighter-rouge">encryptItem</code> and <code class="language-plaintext highlighter-rouge">decryptItem</code>.</p>
 
-&lt;h2 id=&quot;what-does-jay-zs-api-look-like&quot;&gt;What does Jay-Z’s API look like?&lt;/h2&gt;
+<h3 id="encryptitem">EncryptItem</h3>
 
-&lt;p&gt;Now that we’ve covered how Jay-Z works, let’s take a look at how to use it. For illustrative purposes, assume we want to use AWS KMS and the included &lt;code class=&quot;highlighter-rouge&quot;&gt;KMSDataKeyProvider&lt;/code&gt;.&lt;/p&gt;
+<p>When you call <code class="language-plaintext highlighter-rouge">encryptItem</code>, you specify a set of fields to encrypt and the others are left as plaintext (e.g. if persisting to DynamoDB, you don’t want to encrypt your object’s primary key, sort key or indexed attributes).</p>
 
-&lt;h3 id=&quot;1-get-yourself-a-jay-z&quot;&gt;1. Get yourself a Jay-Z&lt;/h3&gt;
+<p>By default, Jay-Z encrypts the specified fields of your JSON object with a unique data key. This key is generated by a configured <code class="language-plaintext highlighter-rouge">DataKeyProvider</code> class. AWS KMS is intended to be the “default” key provider (Jay-Z ships with a <code class="language-plaintext highlighter-rouge">KMSDataKeyProvider</code>), but you can roll your own too.</p>
 
-&lt;p&gt;The first thing you need to do is get a JayZ object:&lt;/p&gt;
+<p>When a <code class="language-plaintext highlighter-rouge">DataKeyProvider</code> generates a data key, it returns two versions of that key - one encrypted (e.g. using a KMS Master Key), and one plaintext.</p>
 
-&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMS&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;aws-sdk&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMSDataKeyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JayZ&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;@ginger.io/jay-z&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;
+<p>The plaintext key is used to encrypt each specified field of your JSON item using libsodium’s <a href="https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox">secretbox</a>. And the encrypted data key, nonce and other metadata required for decryption are appended to your JSON item in a <code class="language-plaintext highlighter-rouge">__jayz__metadata</code> field.</p>
 
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;kmsKeyId&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// the KMS key id or arn you want to use&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMSDataKeyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;kmsKeyId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<h3 id="decryptitem">DecryptItem</h3>
 
-&lt;h3 id=&quot;2-encrypt-a-bank-account&quot;&gt;2. Encrypt a bank account&lt;/h3&gt;
+<p>When you call decryptItem Jay-Z looks for a <code class="language-plaintext highlighter-rouge">__jayz__metadata</code> field on your item, asks the <code class="language-plaintext highlighter-rouge">DataKeyProvider</code> to decrypt the data key. And then uses the (now) plaintext data key to decrypt each field in your JSON item.</p>
 
-&lt;p&gt;Then we can start encrypting JSON objects, like a &lt;code class=&quot;highlighter-rouge&quot;&gt;BankAccount&lt;/code&gt;:&lt;/p&gt;
+<h3 id="diagram">Diagram</h3>
 
-&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bankAccount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;BankAccount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;accountNumber&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;an-123&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;routingNumber&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;rn-123&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<p>Let’s look at a diagram of this flow (<a href="https://github.com/ginger-io/jay-z/raw/master/diagram.svg?sanitize=true">full size</a>):</p>
 
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;encryptedItem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;encryptItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;bankAccount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;accountNumber&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;routingNumber&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// fields to encrypt&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p><img src="https://github.com/ginger-io/jay-z/raw/master/diagram.svg?sanitize=true" /></p>
 
-&lt;h4 id=&quot;note&quot;&gt;Note&lt;/h4&gt;
+<h2 id="what-does-jay-zs-api-look-like">What does Jay-Z’s API look like?</h2>
 
-&lt;p&gt;Jay-Z does not suffer foolish mistakes (like typos).&lt;/p&gt;
+<p>Now that we’ve covered how Jay-Z works, let’s take a look at how to use it. For illustrative purposes, assume we want to use AWS KMS and the included <code class="language-plaintext highlighter-rouge">KMSDataKeyProvider</code>.</p>
 
-&lt;p&gt;Thus the TypeScript type for &lt;code class=&quot;highlighter-rouge&quot;&gt;encryptedItem&lt;/code&gt; (above) is correctly inferred. The &lt;code class=&quot;highlighter-rouge&quot;&gt;accountNumber&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;routingNumber&lt;/code&gt; fields are now (encrypted) binary data and thus have a type of &lt;code class=&quot;highlighter-rouge&quot;&gt;UInt8Array&lt;/code&gt;. The id field will be untouched and still be a &lt;code class=&quot;highlighter-rouge&quot;&gt;string&lt;/code&gt;. And the &lt;code class=&quot;highlighter-rouge&quot;&gt;__jayz__metadata&lt;/code&gt; field will be present in the return type as well.&lt;/p&gt;
+<h3 id="1-get-yourself-a-jay-z">1. Get yourself a Jay-Z</h3>
 
-&lt;p&gt;So when you serialize your data to your data store, you can rest assured that you properly process all of the necessary fields.&lt;/p&gt;
+<p>The first thing you need to do is get a JayZ object:</p>
 
-&lt;h3 id=&quot;3-decrypt-a-bank-account&quot;&gt;3. Decrypt a bank account&lt;/h3&gt;
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">KMS</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">aws-sdk</span><span class="dl">"</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">KMSDataKeyProvider</span><span class="p">,</span> <span class="nx">JayZ</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@ginger.io/jay-z</span><span class="dl">"</span>
 
-&lt;p&gt;Finally, decryption with Jay-Z is easy, just 1 line:&lt;/p&gt;
+<span class="kd">const</span> <span class="nx">kmsKeyId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">...</span><span class="dl">"</span> <span class="c1">// the KMS key id or arn you want to use</span>
+<span class="kd">const</span> <span class="nx">keyProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">KMSDataKeyProvider</span><span class="p">(</span><span class="nx">kmsKeyId</span><span class="p">,</span> <span class="k">new</span> <span class="nx">KMS</span><span class="p">())</span>
+<span class="kd">const</span> <span class="nx">jayZ</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JayZ</span><span class="p">({</span> <span class="nx">keyProvider</span> <span class="p">})</span>
+</code></pre></div></div>
 
-&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;decryptedItem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;decryptItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;encrypted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<h3 id="2-encrypt-a-bank-account">2. Encrypt a bank account</h3>
 
-&lt;h2 id=&quot;providing-your-own-datakeyprovider&quot;&gt;Providing your own DataKeyProvider&lt;/h2&gt;
+<p>Then we can start encrypting JSON objects, like a <code class="language-plaintext highlighter-rouge">BankAccount</code>:</p>
 
-&lt;p&gt;If you don’t want to use KMS (or can’t because you’re not on AWS), you can provide your own. Just implement the DataKeyProvider interface, which is quite simple:&lt;/p&gt;
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">bankAccount</span><span class="p">:</span> <span class="nx">BankAccount</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">accountNumber</span><span class="p">:</span> <span class="dl">"</span><span class="s2">an-123</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">routingNumber</span><span class="p">:</span> <span class="dl">"</span><span class="s2">rn-123</span><span class="dl">"</span><span class="p">,</span>
+<span class="p">}</span>
 
-&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DataKeyProvider&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;generateDataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;DataKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;decryptDataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;encryptedDataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<span class="kd">const</span> <span class="nx">encryptedItem</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">jayZ</span><span class="p">.</span><span class="nx">encryptItem</span><span class="p">(</span>
+  <span class="nx">bankAccount</span><span class="p">,</span>
+  <span class="p">[</span><span class="dl">"</span><span class="s2">accountNumber</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">routingNumber</span><span class="dl">"</span><span class="p">]</span> <span class="c1">// fields to encrypt</span>
+<span class="p">)</span>
+</code></pre></div></div>
 
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DataKey&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;dataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;encryptedDataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<h4 id="note">Note</h4>
 
-&lt;p&gt;Once you have your CustomKeyProvider, you can plug it into Jay-Z like so:&lt;/p&gt;
+<p>Jay-Z does not suffer foolish mistakes (like typos).</p>
 
-&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;CustomDataKeyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(...)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>Thus the TypeScript type for <code class="language-plaintext highlighter-rouge">encryptedItem</code> (above) is correctly inferred. The <code class="language-plaintext highlighter-rouge">accountNumber</code> and <code class="language-plaintext highlighter-rouge">routingNumber</code> fields are now (encrypted) binary data and thus have a type of <code class="language-plaintext highlighter-rouge">UInt8Array</code>. The id field will be untouched and still be a <code class="language-plaintext highlighter-rouge">string</code>. And the <code class="language-plaintext highlighter-rouge">__jayz__metadata</code> field will be present in the return type as well.</p>
 
-&lt;h2 id=&quot;providing-your-own-encryptor&quot;&gt;Providing your own Encryptor&lt;/h2&gt;
+<p>So when you serialize your data to your data store, you can rest assured that you properly process all of the necessary fields.</p>
 
-&lt;p&gt;Recall that Jay-Z uses libsodium’s secretbox to handle the underlying encryption and decryption operations. Given libsodium is one of the most often recommended libraries by cryptographers - you should just use this if you can.&lt;/p&gt;
+<h3 id="3-decrypt-a-bank-account">3. Decrypt a bank account</h3>
 
-&lt;p&gt;But if for some reason you need to use a different encryption or decryption strategy, you can implement the Encryptor interface:&lt;/p&gt;
+<p>Finally, decryption with Jay-Z is easy, just 1 line:</p>
 
-&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Encryptor&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;scheme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EncryptionScheme&lt;/span&gt;
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">decryptedItem</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">jayZ</span><span class="p">.</span><span class="nx">decryptItem</span><span class="p">(</span><span class="nx">encrypted</span><span class="p">)</span>
+</code></pre></div></div>
 
-  &lt;span class=&quot;nx&quot;&gt;encrypt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EncryptParams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;EncryptResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;
+<h2 id="providing-your-own-datakeyprovider">Providing your own DataKeyProvider</h2>
 
-  &lt;span class=&quot;nx&quot;&gt;decrypt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DecryptParams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;DecryptResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<p>If you don’t want to use KMS (or can’t because you’re not on AWS), you can provide your own. Just implement the DataKeyProvider interface, which is quite simple:</p>
 
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EncryptParams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;fieldsToEncrypt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;dataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">DataKeyProvider</span> <span class="p">{</span>
+  <span class="nx">generateDataKey</span><span class="p">():</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">DataKey</span><span class="o">&gt;</span>
+  <span class="nx">decryptDataKey</span><span class="p">(</span><span class="nx">encryptedDataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span><span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nb">Uint8Array</span><span class="o">&gt;</span>
+<span class="p">}</span>
 
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EncryptResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;encryptedItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ItemWithEncryptedFields&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;nonce&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<span class="k">export</span> <span class="kd">type</span> <span class="nx">DataKey</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">dataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+  <span class="na">encryptedDataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DecryptParams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;encryptedItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ItemWithEncryptedFields&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;fieldsToDecrypt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;dataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;nonce&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Uint8Array&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<p>Once you have your CustomKeyProvider, you can plug it into Jay-Z like so:</p>
 
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DecryptResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;decryptedItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">keyProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CustomDataKeyProvider</span><span class="p">(...)</span>
+<span class="kd">const</span> <span class="nx">jayZ</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JayZ</span><span class="p">({</span> <span class="nx">keyProvider</span> <span class="p">})</span>
+</code></pre></div></div>
 
-&lt;p&gt;And once we have our CustomEncryptor, we can plug it in like so:&lt;/p&gt;
+<h2 id="providing-your-own-encryptor">Providing your own Encryptor</h2>
 
-&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;CustomDataKeyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(...)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;encryptor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;CustomEncryptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(...)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;encryptor&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>Recall that Jay-Z uses libsodium’s secretbox to handle the underlying encryption and decryption operations. Given libsodium is one of the most often recommended libraries by cryptographers - you should just use this if you can.</p>
 
-&lt;h2 id=&quot;amortizing-write-latency-and-costs&quot;&gt;Amortizing write latency and costs&lt;/h2&gt;
+<p>But if for some reason you need to use a different encryption or decryption strategy, you can implement the Encryptor interface:</p>
 
-&lt;p&gt;Recall that by default Jay-Z requests a fresh data key from the configured DataKeyProvider on every encryption. This is the most secure option, which is why it is the default.&lt;/p&gt;
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">Encryptor</span> <span class="p">{</span>
+  <span class="k">readonly</span> <span class="nx">scheme</span><span class="p">:</span> <span class="nx">EncryptionScheme</span>
 
-&lt;p&gt;But for some high-write use-cases, you might wish to trade security in order to reduce network latency and/or billing costs. KMS is both fairly fast and fairly cheap, but you might not be using KMS.&lt;/p&gt;
+  <span class="nx">encrypt</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span> <span class="kd">extends</span> <span class="kr">keyof</span> <span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nx">params</span><span class="p">:</span> <span class="nx">EncryptParams</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;</span>
+  <span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">EncryptResult</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;&gt;</span>
 
-&lt;p&gt;So Jay-Z allows you to amortize these costs by reusing data keys across encryption operations via its maxUsesPerDataKey parameter.&lt;/p&gt;
+  <span class="nx">decrypt</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span> <span class="kd">extends</span> <span class="kr">keyof</span> <span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nx">params</span><span class="p">:</span> <span class="nx">DecryptParams</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;</span>
+  <span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">DecryptResult</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;&gt;</span>
+<span class="p">}</span>
 
-&lt;p&gt;Setting this to a value of N means that Jay-Z will reuse a particular data key a maximum of N times before requesting a new one. For example we could set this to 100:&lt;/p&gt;
+<span class="k">export</span> <span class="kd">type</span> <span class="nx">EncryptParams</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span> <span class="kd">extends</span> <span class="kr">keyof</span> <span class="nx">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">item</span><span class="p">:</span> <span class="nx">T</span>
+  <span class="na">fieldsToEncrypt</span><span class="p">:</span> <span class="nx">K</span><span class="p">[]</span>
+  <span class="na">dataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+<span class="p">}</span>
 
-&lt;div class=&quot;language-typescript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMSDataKeyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;kmsKeyId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;KMS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;jayZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JayZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;keyProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;maxUsesPerDataKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<span class="k">export</span> <span class="kd">type</span> <span class="nx">EncryptResult</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span> <span class="kd">extends</span> <span class="kr">keyof</span> <span class="nx">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">encryptedItem</span><span class="p">:</span> <span class="nx">ItemWithEncryptedFields</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;</span>
+  <span class="na">nonce</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+<span class="p">}</span>
 
-&lt;p&gt;If you choose to use this option, just be aware of the security tradeoffs you’re making.&lt;/p&gt;
+<span class="k">export</span> <span class="kd">type</span> <span class="nx">DecryptParams</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span> <span class="kd">extends</span> <span class="kr">keyof</span> <span class="nx">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">encryptedItem</span><span class="p">:</span> <span class="nx">ItemWithEncryptedFields</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">K</span><span class="o">&gt;</span>
+  <span class="na">fieldsToDecrypt</span><span class="p">:</span> <span class="nx">K</span><span class="p">[]</span>
+  <span class="na">dataKey</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+  <span class="na">nonce</span><span class="p">:</span> <span class="nb">Uint8Array</span>
+<span class="p">}</span>
 
-&lt;h2 id=&quot;use-cases-for-jay-z&quot;&gt;Use cases for Jay-Z&lt;/h2&gt;
+<span class="k">export</span> <span class="kd">type</span> <span class="nx">DecryptResult</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">decryptedItem</span><span class="p">:</span> <span class="nx">T</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-&lt;h3 id=&quot;dynamodb-or-other-nosql-databases&quot;&gt;DynamoDB or other “NoSQL” databases&lt;/h3&gt;
+<p>And once we have our CustomEncryptor, we can plug it in like so:</p>
 
-&lt;p&gt;Jay-Z was originally designed with DynamoDB in mind. Thus it is a natural fit to use here. You can use Jay-Z as a standalone library but we have an upcoming blog-post that you’ll want to stay-tuned for (hint, it involves another library we’re calling Beyoncé).&lt;/p&gt;
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">keyProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CustomDataKeyProvider</span><span class="p">(...)</span>
+<span class="kd">const</span> <span class="nx">encryptor</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CustomEncryptor</span><span class="p">(...)</span>
+<span class="kd">const</span> <span class="nx">jayZ</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JayZ</span><span class="p">({</span> <span class="nx">keyProvider</span><span class="p">,</span> <span class="nx">encryptor</span> <span class="p">})</span>
+</code></pre></div></div>
 
-&lt;h3 id=&quot;s3&quot;&gt;S3&lt;/h3&gt;
+<h2 id="amortizing-write-latency-and-costs">Amortizing write latency and costs</h2>
 
-&lt;p&gt;If you’re storing JSON documents in S3 - or you store your data in S3 in another format, but your domain objects are JSON or JSON-like - Jay-Z might be a good fit for you. However if you’re using a binary format - Jay-Z isn’t going to be a great fit for your use-case.&lt;/p&gt;
+<p>Recall that by default Jay-Z requests a fresh data key from the configured DataKeyProvider on every encryption. This is the most secure option, which is why it is the default.</p>
 
-&lt;h3 id=&quot;sql-orms&quot;&gt;SQL-ORMs&lt;/h3&gt;
+<p>But for some high-write use-cases, you might wish to trade security in order to reduce network latency and/or billing costs. KMS is both fairly fast and fairly cheap, but you might not be using KMS.</p>
 
-&lt;p&gt;Jay-Z could potentially be used as “middleware” to a SQL-like ORM whose domain objects are either JSON or JS/TypeScript classes. But it’s important to point out that this is much less of a natural fit than with “NoSQL” datastores as the middleware would have to implement a strategy to persist the &lt;code class=&quot;highlighter-rouge&quot;&gt;__jayz__metadata&lt;/code&gt; field and rehydrate it into domain objects - e.g. either as a column on each “model” or in a special table.&lt;/p&gt;
+<p>So Jay-Z allows you to amortize these costs by reusing data keys across encryption operations via its maxUsesPerDataKey parameter.</p>
 
-&lt;h2 id=&quot;future-work&quot;&gt;Future work&lt;/h2&gt;
+<p>Setting this to a value of N means that Jay-Z will reuse a particular data key a maximum of N times before requesting a new one. For example we could set this to 100:</p>
 
-&lt;p&gt;There’s a few things that would improve Jay-Z that we’re currently thinking about. No promises as to our road-map, but here’s what’s on our minds:&lt;/p&gt;
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">keyProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">KMSDataKeyProvider</span><span class="p">(</span><span class="nx">kmsKeyId</span><span class="p">,</span> <span class="k">new</span> <span class="nx">KMS</span><span class="p">())</span>
+<span class="kd">const</span> <span class="nx">jayZ</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JayZ</span><span class="p">({</span> <span class="nx">keyProvider</span><span class="p">,</span> <span class="na">maxUsesPerDataKey</span><span class="p">:</span> <span class="mi">100</span> <span class="p">})</span>
+</code></pre></div></div>
 
-&lt;h3 id=&quot;custom-signatures&quot;&gt;Custom signatures&lt;/h3&gt;
+<p>If you choose to use this option, just be aware of the security tradeoffs you’re making.</p>
 
-&lt;p&gt;Jay-Z’s default encryption strategy uses authenticated encryption. But for some use-cases you might want to calculate a custom signature (e.g. HMAC) that includes additional data that you care about.&lt;/p&gt;
+<h2 id="use-cases-for-jay-z">Use cases for Jay-Z</h2>
 
-&lt;p&gt;Jay-Z could easily support this by giving callers a way to plug-in a custom signature, which could be appended to the &lt;code class=&quot;highlighter-rouge&quot;&gt;__jayz__metadata&lt;/code&gt; field. And verified prior to attempting to decrypt an item.&lt;/p&gt;
+<h3 id="dynamodb-or-other-nosql-databases">DynamoDB or other “NoSQL” databases</h3>
 
-&lt;h3 id=&quot;an-optional-feature-to-amortize-read-latency-andor-billing-costs&quot;&gt;An optional feature to amortize read latency and/or billing costs&lt;/h3&gt;
+<p>Jay-Z was originally designed with DynamoDB in mind. Thus it is a natural fit to use here. You can use Jay-Z as a standalone library but we have an upcoming blog-post that you’ll want to stay-tuned for (hint, it involves another library we’re calling Beyoncé).</p>
 
-&lt;p&gt;Jay-Z currently offers a way to amortize write latency and/or billing costs via a parameter that lets you specify how many times a data key can be used. It’d be nice to offer a way to amortize read latency and/or billing costs as well.&lt;/p&gt;
+<h3 id="s3">S3</h3>
 
-&lt;p&gt;This could be accomplished by introducing a data-key cache at the application layer. This of course reduces the level of security offered. And at the time of writing appears to be a fairly niche use-case, so it has not yet been implemented in Jay-Z.&lt;/p&gt;
+<p>If you’re storing JSON documents in S3 - or you store your data in S3 in another format, but your domain objects are JSON or JSON-like - Jay-Z might be a good fit for you. However if you’re using a binary format - Jay-Z isn’t going to be a great fit for your use-case.</p>
 
-&lt;h2 id=&quot;questions-or-suggesstions&quot;&gt;Questions or suggesstions?&lt;/h2&gt;
+<h3 id="sql-orms">SQL-ORMs</h3>
 
-&lt;p&gt;Email us at &lt;a href=&quot;mailto:engineering-blog@ginger.io&quot;&gt;engineering-blog@ginger.io&lt;/a&gt;&lt;/p&gt;</content><author><name>Josh Carver</name></author><summary type="html">Ginger’s TypeScript library for application-layer encryption</summary></entry></feed>
+<p>Jay-Z could potentially be used as “middleware” to a SQL-like ORM whose domain objects are either JSON or JS/TypeScript classes. But it’s important to point out that this is much less of a natural fit than with “NoSQL” datastores as the middleware would have to implement a strategy to persist the <code class="language-plaintext highlighter-rouge">__jayz__metadata</code> field and rehydrate it into domain objects - e.g. either as a column on each “model” or in a special table.</p>
+
+<h2 id="future-work">Future work</h2>
+
+<p>There’s a few things that would improve Jay-Z that we’re currently thinking about. No promises as to our road-map, but here’s what’s on our minds:</p>
+
+<h3 id="custom-signatures">Custom signatures</h3>
+
+<p>Jay-Z’s default encryption strategy uses authenticated encryption. But for some use-cases you might want to calculate a custom signature (e.g. HMAC) that includes additional data that you care about.</p>
+
+<p>Jay-Z could easily support this by giving callers a way to plug-in a custom signature, which could be appended to the <code class="language-plaintext highlighter-rouge">__jayz__metadata</code> field. And verified prior to attempting to decrypt an item.</p>
+
+<h3 id="an-optional-feature-to-amortize-read-latency-andor-billing-costs">An optional feature to amortize read latency and/or billing costs</h3>
+
+<p>Jay-Z currently offers a way to amortize write latency and/or billing costs via a parameter that lets you specify how many times a data key can be used. It’d be nice to offer a way to amortize read latency and/or billing costs as well.</p>
+
+<p>This could be accomplished by introducing a data-key cache at the application layer. This of course reduces the level of security offered. And at the time of writing appears to be a fairly niche use-case, so it has not yet been implemented in Jay-Z.</p>
+
+<h2 id="questions-or-suggesstions">Questions or suggesstions?</h2>
+
+<p>Email us at <a href="mailto:engineering-blog@ginger.io">engineering-blog@ginger.io</a></p>]]></content><author><name>Josh Carver</name></author><category term="security" /><category term="aws" /><summary type="html"><![CDATA[Ginger’s TypeScript library for application-layer encryption]]></summary></entry></feed>
