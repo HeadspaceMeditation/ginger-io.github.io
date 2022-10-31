@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,400,400italic,700,700italic,900,900italic%7COpen+Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic"
+      media="all"
+    />
+
+    <link rel="stylesheet" href="/assets/css/bulma.min.css" media="all" />
+    <link rel="stylesheet" href="/assets/css/main.css" media="all" />
+  </head>
+  <body>
+    <nav class="mainNav">
+      <div class="navContent">
+        <a href="/">
+          <img src="/assets/images/logo.svg" />
+        </a>
+
+        <ul class="menu">
+          <li><a href="/">Home</a></li>
+          <li><a href="/feed.xml">RSS</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container content">
+      <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Open Sourcing Transformer Embeddings</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2022-10-28T00:00:00-07:00" itemprop="datePublished">Oct 28, 2022
+      </time>• <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">Setu Shah</span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The Data Science team at Headspace Health is a heavy user of building, training and productionizing transformer-based NLP models.</p>
+
+<p>Depending on the application, our NLP models operate at varying levels of atomicity: token, word, phrase, sentence, paragraph and document. A lot of our models rely on embeddings from off-the-shelf <a href="https://huggingface.co/models">Transformer-based models</a>, while some are fine-tuned for the application we are building for. Similarly, as a part of our work, we often try out different models during exploration, while comparing various pooling methods.</p>
+
+<p>About 18 months ago, we discovered the need for a streamlined way to use embeddings across our work for our exploration and production use cases. That is when we started building <code class="language-plaintext highlighter-rouge">transformer-embeddings</code>, an internal Python package that made it easy to interact with transformer-based models that are built using <a href="https://pytorch.org/">PyTorch</a>.</p>
+
+<p>Today, we are <a href="https://github.com/ginger-io/transformer-embeddings/">open-sourcing this package</a> and <a href="https://pypi.org/project/transformer-embeddings/">publishing it to PyPI</a> to make it easy for anyone in the transformer and NLP communities to be able to use aggregated and pooled embeddings for phrases, sentences and paragraphs and documents, at varying levels of aggregation, in any of their applications.</p>
+
+<h3 id="you-should-use-this-if-you-want-to">You should use this if you want to…</h3>
+
+<ul>
+  <li>Automatically apply tokenization (with the model defaults) before your model’s forward pass.</li>
+  <li>Stack outputs from the model into a single, iterable array that map 1:1 with your input.</li>
+  <li>Simplify interactions with any transformer model available on the <a href="https://huggingface.co/models">HuggingFace Model Hub</a> for exploration and inference.</li>
+  <li>Easily apply and compare the impact of different pooling strategies (mean, max, min, pooler) on your downstream tasks.</li>
+  <li>Use your model on CPUs or GPUs, without worrying about if you asked PyTorch to use the right device.</li>
+  <li>Export the model and additional artifacts (custom scikit-learn / tree-based models, model cards, etc.) to S3.</li>
+  <li>Customize batch sizes for different models as you play with them.</li>
+</ul>
+
+<h2 id="you-should-not-use-this-if-you-want-to">You should <em>not</em> use this if you want to…</h2>
+
+<ul>
+  <li>Fine-tune the underlying embedding models or train new models. (We recommend <a href="https://github.com/huggingface/transformers">HF <code class="language-plaintext highlighter-rouge">transformers</code></a> or <a href="https://github.com/UKPLab/sentence-transformers"><code class="language-plaintext highlighter-rouge">sentence-transformers</code></a> as alternatives.)</li>
+  <li>Use TensorFlow / JAX for your deep learning models.</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">transformer-embeddings</code> is a battle-tested package for generating embeddings from transformer models in 10+ of our internal production workflows, running on CPUs or GPUs, for real-time and batch inference. We hope you use it, like it and it makes it easier for you to use transformer models, as it has for us :).</p>
+
+<h2 id="questions-or-suggestions">Questions or suggestions?</h2>
+
+<p>Email us at <a href="mailto:transformer-embeddings@headspace.com">transformer-embeddings@headspace.com</a>.</p>
+
+  </div><a class="u-url" href="/nlp/data%20science/open%20source/2022/10/28/open-sourcing-transformer-embeddings.html" hidden></a>
+</article>
+
+    </div>
+  </body>
+</html>
